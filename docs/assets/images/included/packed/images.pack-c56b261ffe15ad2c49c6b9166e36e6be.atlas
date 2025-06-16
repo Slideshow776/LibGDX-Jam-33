@@ -1,0 +1,68 @@
+
+images.pack.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+blue_circle
+  rotate: false
+  xy: 2, 5
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+gui/map
+  rotate: false
+  xy: 2, 71
+  size: 950, 950
+  orig: 950, 950
+  offset: 0, 0
+  index: -1
+redKey
+  rotate: false
+  xy: 954, 949
+  size: 17, 6
+  orig: 17, 6
+  offset: 0, 0
+  index: -1
+triangle
+  rotate: false
+  xy: 954, 957
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+whitePixel
+  rotate: false
+  xy: 2, 2
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+yellow_triangle
+  rotate: false
+  xy: 68, 5
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+
+images.pack2.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+gui/calendar
+  rotate: false
+  xy: 2, 2
+  size: 730, 725
+  orig: 730, 725
+  offset: 0, 0
+  index: -1
+water_bottle
+  rotate: false
+  xy: 734, 290
+  size: 245, 437
+  orig: 245, 437
+  offset: 0, 0
+  index: -1

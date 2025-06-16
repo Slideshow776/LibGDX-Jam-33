@@ -134,7 +134,14 @@ public class LevelScreen extends BaseScreen {
         // pick up water
         for (WaterPickup water_pickup : waterPickups) {
             if (player.overlaps(water_pickup)) {
-                water_bar.incrementPercentage(15);
+                float roll = MathUtils.random();
+                if (roll <= 0.1f) {
+                    water_bar.incrementPercentage(30);
+                } else if (roll <= 0.5f) {
+                    water_bar.incrementPercentage(15);
+                } else {
+                    water_bar.incrementPercentage(5);
+                }
                 water_pickup.consume();
                 waterPickups.removeValue(water_pickup, false);
             }
@@ -189,6 +196,7 @@ public class LevelScreen extends BaseScreen {
             enemies.add(new Enemy(mainStage));
 
             water_consumption_rate -= 0.0125f;
+            water_spawn_interval -= 0.1f;
         }
     }
 

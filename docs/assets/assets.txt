@@ -1,5 +1,5 @@
 d:assets:assets:0:application/unknown:1
-t:assets.txt:assets-874413128c30de3dc1da1f7b0d6b228b.txt:1577:text/plain:1
+t:assets.txt:assets-403602e1ed265f7d0ca312e8c3a33400.txt:1460:text/plain:1
 d:audio:audio:0:application/unknown:1
 d:audio/music:audio/music:0:application/unknown:1
 a:audio/music/361424__furbyguy__synth-metal-rock-loop.wav:audio/music/361424__furbyguy__synth-metal-rock-loop-12ae44643aff0a5db0cae4b5fcd986b6.wav:11289644:audio/x-wav:1
@@ -34,20 +34,23 @@ i:images/excluded/icon_64x64.png:images/excluded/icon_64x64-3334a55472161f07be67
 i:images/excluded/splash landscape.jpg:images/excluded/splash landscape-b58b72b977c60fcec850b237eb4ae481.jpg:603279:image/jpeg:1
 i:images/excluded/splash portrait.jpg:images/excluded/splash portrait-eaf3fe895e8053ecfccf687d9434c7fd.jpg:1249521:image/jpeg:1
 d:images/included:images/included:0:application/unknown:1
-i:images/included/blue_circle.png:images/included/blue_circle-ca09fa8ae3e5ca9f5b9bc9bf50027dca.png:1168:image/png:1
+i:images/included/blue_circle.png:images/included/blue_circle-e8350ff6e4746de5934c1731e98f6308.png:6856:image/png:1
+b:images/included/coralPixel.png~:images/included/coralPixel-1a959da19ff7ac8b2cdf957aa8a24539.png~:13794:application/unknown:1
+d:images/included/gui:images/included/gui:0:application/unknown:1
+i:images/included/gui/calendar.png:images/included/gui/calendar-8ffb34fc4ee9f3449c79df6ce3e32ea8.png:121221:image/png:1
+i:images/included/gui/map.png:images/included/gui/map-138151a9c66eac99d7a27d809b8436c4.png:1237896:image/png:1
 d:images/included/packed:images/included/packed:0:application/unknown:1
-t:images/included/packed/images.pack.atlas:images/included/packed/images.pack-aed01ed0ae25310d0dacf53c5bec44fa.atlas:2949:application/unknown:1
-i:images/included/packed/images.pack.png:images/included/packed/images.pack-13bc5131559744b3e5685c8d1a79b493.png:50074:image/png:1
-i:images/included/packed/images.pack2.png:images/included/packed/images.pack2-1692297fa83d6d02a6c62766d369626b.png:79905:image/png:1
-i:images/included/packed/images.pack3.png:images/included/packed/images.pack3-8f672a75b0a9c60dd4b0576989920d0e.png:43761:image/png:1
-i:images/included/packed/images.pack4.png:images/included/packed/images.pack4-992f2b332e27c34e3fff03317d3e4f4f.png:19577:image/png:1
-i:images/included/packed/images.pack5.png:images/included/packed/images.pack5-b9433cdef4db0144f6a1b062d016c6f3.png:11047:image/png:1
-i:images/included/packed/images.pack6.png:images/included/packed/images.pack6-8ce65dee041763d7f1fee6ac838bc9b1.png:11216:image/png:1
-i:images/included/packed/images.pack7.png:images/included/packed/images.pack7-2749d54971e5a769a461bea26c2c23a5.png:13438:image/png:1
-i:images/included/packed/images.pack8.png:images/included/packed/images.pack8-ce03ea8b2c54ce6a11e79448a6a2b838.png:8449:image/png:1
+t:images/included/packed/images.pack.atlas:images/included/packed/images.pack-c56b261ffe15ad2c49c6b9166e36e6be.atlas:960:application/unknown:1
+i:images/included/packed/images.pack.png:images/included/packed/images.pack-48282f4cbae69d7e28f5b184759fbfd5.png:1600234:image/png:1
+i:images/included/packed/images.pack2.png:images/included/packed/images.pack2-371bfa28a8dc9012157c51cb8bb2dada.png:269255:image/png:1
+d:images/included/parallax_backgrounds:images/included/parallax_backgrounds:0:application/unknown:1
+b:images/included/player_test.png~:images/included/player_test-5a75c209b51e22190ca023b7b0ced497.png~:29074:application/unknown:1
 i:images/included/redKey.png:images/included/redKey-59162e30ab49cf65edcf5ddc278ee500.png:129:image/png:1
+i:images/included/triangle.png:images/included/triangle-36c8e52a598b0d8bd1c1d46ea53f083b.png:6567:image/png:1
+i:images/included/water_bottle.png:images/included/water_bottle-12803f1795c5dbcbb043fac000faead8.png:76415:image/png:1
 i:images/included/whitePixel.png:images/included/whitePixel-de87a441c71a403f3db732f7870d5b10.png:1260:image/png:1
 i:images/included/yellow_triangle.png:images/included/yellow_triangle-87b5d7952738e9e7ff2f8ace3501ca24.png:1272:image/png:1
+b:images/included/yellow_triangle.png~:images/included/yellow_triangle-a501603d88d357c07e168a35fa928931.png~:1260:application/unknown:1
 d:maps:maps:0:application/unknown:1
 i:maps/assets.png:maps/assets-feeee9670af52f9b230cb5e005b358f3.png:607:image/png:1
 b:maps/level1.tmx:maps/level1-4fb9d2839043a597b3a320b698f20d0b.tmx:1309:application/unknown:1
@@ -67,7 +70,7 @@ i:skins/mySkin/mySkin.png:skins/mySkin/mySkin-1d3ff609e8981cc82eb13f49c9443779.p
 t:skins/mySkin/Play-Bold20white.fnt:skins/mySkin/Play-Bold20white-806891eff3f594129ffd7887f701986a.fnt:21264:application/unknown:1
 t:skins/mySkin/Play-Bold40white.fnt:skins/mySkin/Play-Bold40white-d79fdc6adb81a9ca2a92858ef34f7b9b.fnt:21265:application/unknown:1
 t:skins/mySkin/Play-Bold59white.fnt:skins/mySkin/Play-Bold59white-34aafd2cc14443caabd2032c23be0076.fnt:21265:application/unknown:1
-t:skins/mySkin/Play-Bold96white.fnt:skins/mySkin/Play-Bold96white-be28d345ed934abf32cc41da53db95d2.fnt:11181:application/unknown:1
+t:skins/mySkin/Play-Bold96white.fnt:skins/mySkin/Play-Bold96white-2d18bb7f433ab22a7f2643ffef06f818.fnt:11285:application/unknown:1
 t:com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:particles.fragment-b90524761fdf09b0a836056d590c30b8.glsl:820:application/unknown:1
 t:com/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl:particles.vertex-f25b8b2fae10b9bfa09bfdd484923148.glsl:2886:application/unknown:1
 t:com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:default.fragment-e1c018bd48044c8b67c7bbc53145e540.glsl:5874:application/unknown:1
