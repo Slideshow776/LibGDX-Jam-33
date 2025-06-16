@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -13,6 +14,7 @@ import no.sandramoen.libgdx33.actors.Background;
 import no.sandramoen.libgdx33.actors.Enemy;
 import no.sandramoen.libgdx33.actors.MapLine;
 import no.sandramoen.libgdx33.actors.Player;
+import no.sandramoen.libgdx33.actors.WaterPickup;
 import no.sandramoen.libgdx33.gui.BaseProgressBar;
 import no.sandramoen.libgdx33.utils.AssetLoader;
 import no.sandramoen.libgdx33.utils.BaseActor;
@@ -29,14 +31,18 @@ public class LevelScreen extends BaseScreen {
     private Player player;
     private Array<Enemy> enemies;
     private Array<MapLine> map_lines;
+    private Array<WaterPickup> waterPickups;
 
     private float game_time = 0f;
     private float lastEnemySpawnTime = 0f;
     private float enemySpawnInterval = 10f;
     private final float MIN_SPAWN_INTERVAL = 0.5f;
 
-    private float map_line_spawn_interval = 0.5f;
+    private float map_line_spawn_interval = 0.075f;
     private float last_map_line_spawn_time = 0f;
+
+    private float water_spawn_interval = 5.0f;
+    private float last_water_spawn_time = 0f;
 
     private float scoreUpdateTimer = 0f;
     private final float SCORE_UPDATE_INTERVAL = 2.5f; // update every 1 second, change `s` here
@@ -56,6 +62,7 @@ public class LevelScreen extends BaseScreen {
             enemies.add(new Enemy(mainStage));
 
         map_lines = new Array<MapLine>();
+        waterPickups = new Array<WaterPickup>();
 
         initialize_gui();
     }
@@ -65,6 +72,8 @@ public class LevelScreen extends BaseScreen {
     public void update(float delta) {
         if (player.isMoving() && !player.is_dead) {
             game_time += delta;
+
+            // update enemies
             for (Enemy enemy : enemies) {
                 enemy.pause = false;
 
@@ -74,19 +83,47 @@ public class LevelScreen extends BaseScreen {
                     messageLabel.getColor().a = 1.0f;
                 }
 
-                // spawn map line outside enemy loop!
-                last_map_line_spawn_time += delta;
-                if (last_map_line_spawn_time >= map_line_spawn_interval) {
-                    MapLine map_line = new MapLine(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, mainStage);
-                    map_line.setRotation(player.getMotionAngle());
-                    map_line.setZIndex(map_background.getZIndex() + 1);
-                    map_lines.add(map_line);
-                    last_map_line_spawn_time = 0f;
+
+            }
+
+            // create map lines
+            // spawn map line outside enemy loop!
+            last_map_line_spawn_time += delta;
+            if (last_map_line_spawn_time >= map_line_spawn_interval) {
+                MapLine map_line = new MapLine(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, mainStage);
+                map_line.setRotation(player.getMotionAngle());
+                map_line.setZIndex(map_background.getZIndex() + 1);
+                map_lines.add(map_line);
+                last_map_line_spawn_time = 0f;
+            }
+            for (MapLine map_line : map_lines)
+                map_line.pause = false;
+
+            // water
+            for (WaterPickup water_pickup : waterPickups) {
+                if (player.overlaps(water_pickup)) {
+                    water_bar.incrementPercentage(15);
+                    water_pickup.consume();
                 }
             }
 
-            for (MapLine map_line : map_lines)
-                map_line.pause = false;
+            // consume water
+            if (!water_bar.progress.hasActions()) {
+                water_bar.decrementPercentage(1);
+            }
+
+            // create water
+            last_water_spawn_time += delta;
+            if (last_water_spawn_time >= water_spawn_interval) {
+                WaterPickup water_pickup = new WaterPickup(mainStage);
+                water_pickup.centerAtPosition(
+                    MathUtils.random(1f, BaseGame.WORLD_WIDTH - 1),
+                    MathUtils.random(1f, BaseGame.WORLD_HEIGHT - 1)
+                );
+                waterPickups.add(water_pickup);
+                last_water_spawn_time = 0f;
+            }
+
 
         } else {
             for (Enemy enemy : enemies) {
@@ -104,8 +141,6 @@ public class LevelScreen extends BaseScreen {
             lastEnemySpawnTime = game_time;
             enemies.add(new Enemy(mainStage));
         }
-
-
 
         // Update the score update timer
         scoreUpdateTimer += delta;

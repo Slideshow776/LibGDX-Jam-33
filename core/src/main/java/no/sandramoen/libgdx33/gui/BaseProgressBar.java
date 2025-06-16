@@ -108,9 +108,9 @@ public class BaseProgressBar extends BaseActor {
 
         Action action = Actions.sequence(
             Actions.delay(0.2f),
-            Actions.scaleTo(1.0f, 0.9f, 0.3f, Interpolation.bounceOut),
-            Actions.scaleTo(1.0f, 1.1f, 0.3f, Interpolation.bounceOut),
-            Actions.scaleTo(1.0f, 1.0f, 2.5f, Interpolation.bounceOut)
+            Actions.scaleTo(1.0f, 0.98f, 0.05f, Interpolation.bounceOut),
+            Actions.scaleTo(1.0f, 1.02f, 0.05f, Interpolation.bounceOut),
+            Actions.scaleTo(1.0f, 1.0f, 0.41f, Interpolation.bounceOut)
         );
         addAction(action);
         progress.addAction(action);
