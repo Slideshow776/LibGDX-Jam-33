@@ -1,4 +1,4 @@
-# LibGDX Jam #32
+# LibGDX Jam #33
 A jam game made by [tommyettinger](https://github.com/tommyettinger) and me.
 
 ## libGDX
