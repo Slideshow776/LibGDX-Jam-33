@@ -2,31 +2,36 @@ package no.sandramoen.libgdx33.screens.gameplay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import no.sandramoen.libgdx33.actors.player.Player;
-import no.sandramoen.libgdx33.utils.BaseActor;
+import com.badlogic.gdx.utils.Array;
+
+import no.sandramoen.libgdx33.actors.Background;
+import no.sandramoen.libgdx33.actors.Enemy;
+import no.sandramoen.libgdx33.actors.Player;
 import no.sandramoen.libgdx33.utils.BaseGame;
 import no.sandramoen.libgdx33.utils.BaseScreen;
 
 public class LevelScreen extends BaseScreen {
 
     private Player player;
+    private Array<Enemy> enemies;
 
 
     @Override
-    public void initialize() {}
-
-
-    @Override
-    public void update(float delta) {
+    public void initialize() {
         // background
-        BaseActor sky_background = new BaseActor(0f, 0f, mainStage);
-        sky_background.loadImage("parallax_backgrounds/-1");
-        sky_background.setSize(BaseGame.WORLD_WIDTH + 2, BaseGame.WORLD_HEIGHT + 2);
-        sky_background.setPosition(sky_background.getX() - 1, sky_background.getY() - 1);
+        new Background(0f, 0f, mainStage);
 
         // characters
-        player = new Player(BaseGame.WORLD_WIDTH / 2, 1, mainStage);
+        player = new Player(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage);
+
+        enemies = new Array<Enemy>();
+        for(int i = 0; i < 10; i++)
+            enemies.add(new Enemy(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage));
     }
+
+
+    @Override
+    public void update(float delta) {}
 
 
     @Override
