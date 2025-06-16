@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import no.sandramoen.libgdx33.utils.BaseActor;
+import no.sandramoen.libgdx33.utils.BaseGame;
 
 
 public class Player extends BaseActor {
@@ -21,6 +22,8 @@ public class Player extends BaseActor {
         setSize(1, 1);
         centerAtPosition(x, y);
         setOrigin(Align.center);
+
+        setWorldBounds(BaseGame.WORLD_WIDTH + 0.5f, BaseGame.WORLD_HEIGHT);
 
         // movement
         setAcceleration(movementAcceleration);
@@ -44,6 +47,12 @@ public class Player extends BaseActor {
             accelerateAtAngle(0f);
 
         applyPhysics(delta);
-        //boundToWorld();
+        boundToWorld();
     }
+
+
+    public boolean isMoving() {
+        return getSpeed() > 0.1f; // small threshold to avoid tiny jitter counts as moving
+    }
+
 }

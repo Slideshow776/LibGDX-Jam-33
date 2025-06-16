@@ -25,13 +25,24 @@ public class LevelScreen extends BaseScreen {
         player = new Player(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage);
 
         enemies = new Array<Enemy>();
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 50; i++)
             enemies.add(new Enemy(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage));
     }
 
 
     @Override
-    public void update(float delta) {}
+    public void update(float delta) {
+        if (player.isMoving()) {
+            for (Enemy enemy : enemies) {
+                enemy.pause = false;
+            }
+        } else {
+            for (Enemy enemy : enemies) {
+                enemy.pause = true;
+            }
+        }
+    }
+
 
 
     @Override

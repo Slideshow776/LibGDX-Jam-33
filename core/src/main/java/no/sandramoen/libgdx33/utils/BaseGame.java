@@ -32,8 +32,7 @@ public abstract class BaseGame extends Game implements AssetErrorListener {
     public static final float WORLD_WIDTH = 9f;
     public static final float WORLD_HEIGHT = 16f;
 
-    public static int health = 100;
-    public static int mana = 0;
+    public static boolean is_game_paused = true;
 
     public BaseGame() {
         game = this;

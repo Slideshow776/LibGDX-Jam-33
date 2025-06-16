@@ -20,6 +20,7 @@ public class Enemy extends BaseActor {
 
     public Enemy(float x, float y, Stage s) {
         super(x, y, s);
+
         loadImage("yellow_triangle");
 
         // body
@@ -34,7 +35,9 @@ public class Enemy extends BaseActor {
 
     @Override
     public void act(float delta) {
+        if (pause) return;
         super.act(delta);
+
         accelerateAtAngle(angle);
         applyPhysics(delta);
 
