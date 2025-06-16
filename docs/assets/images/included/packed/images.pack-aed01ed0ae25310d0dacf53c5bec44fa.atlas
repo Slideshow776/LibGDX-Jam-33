@@ -1,0 +1,195 @@
+
+images.pack.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+blue_circle
+  rotate: false
+  xy: 862, 543
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+enemy/enemy
+  rotate: false
+  xy: 604, 95
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+libgdx
+  rotate: false
+  xy: 604, 30
+  size: 378, 63
+  orig: 378, 63
+  offset: 0, 0
+  index: -1
+parallax_backgrounds/0
+  rotate: false
+  xy: 2, 10
+  size: 600, 999
+  orig: 600, 999
+  offset: 0, 0
+  index: -1
+player
+  rotate: false
+  xy: 604, 609
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+redKey
+  rotate: false
+  xy: 2, 2
+  size: 17, 6
+  orig: 17, 6
+  offset: 0, 0
+  index: -1
+whitePixel
+  rotate: false
+  xy: 1006, 1008
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+yellow_triangle
+  rotate: false
+  xy: 862, 477
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+
+images.pack2.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+player/arm_test
+  rotate: false
+  xy: 604, 231
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+player/hud/0
+  rotate: false
+  xy: 2, 2
+  size: 600, 999
+  orig: 600, 999
+  offset: 0, 0
+  index: -1
+player/player
+  rotate: false
+  xy: 604, 489
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+
+images.pack3.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+enemy/death_projectile
+  rotate: false
+  xy: 604, 745
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+enemy/fire_projectile
+  rotate: false
+  xy: 604, 487
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+enemy/lightning_projectile
+  rotate: false
+  xy: 604, 229
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+parallax_backgrounds/1
+  rotate: false
+  xy: 2, 2
+  size: 600, 999
+  orig: 600, 999
+  offset: 0, 0
+  index: -1
+
+images.pack4.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+parallax_backgrounds/2
+  rotate: false
+  xy: 2, 2
+  size: 600, 999
+  orig: 600, 999
+  offset: 0, 0
+  index: -1
+player/projectile
+  rotate: false
+  xy: 604, 745
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+images.pack5.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+parallax_backgrounds/3
+  rotate: false
+  xy: 2, 2
+  size: 600, 999
+  orig: 600, 999
+  offset: 0, 0
+  index: -1
+
+images.pack6.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+parallax_backgrounds/4
+  rotate: false
+  xy: 2, 2
+  size: 600, 999
+  orig: 600, 999
+  offset: 0, 0
+  index: -1
+
+images.pack7.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+parallax_backgrounds/-1
+  rotate: false
+  xy: 2, 2
+  size: 600, 999
+  orig: 600, 999
+  offset: 0, 0
+  index: -1
+
+images.pack8.png
+size: 1024, 256
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+player/shield
+  rotate: false
+  xy: 2, 2
+  size: 512, 180
+  orig: 512, 180
+  offset: 0, 0
+  index: -1
