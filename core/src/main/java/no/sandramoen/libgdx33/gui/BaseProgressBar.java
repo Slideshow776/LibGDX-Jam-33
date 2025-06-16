@@ -19,7 +19,7 @@ public class BaseProgressBar extends BaseActor {
     public int level = 0; // Store level as an integer from 0 to 100
     public float animationDuration = 0.25f;
 
-    private BaseActor progress;
+    public BaseActor progress;
     private TypingLabel label;
 
     public BaseProgressBar(float x, float y, Stage stage) {
@@ -27,7 +27,7 @@ public class BaseProgressBar extends BaseActor {
 
         loadImage("whitePixel");
         setColor(new Color(0.035f, 0.039f, 0.078f, 1f));
-        setSize(Gdx.graphics.getWidth() * 0.9f, Gdx.graphics.getHeight() * 0.05f);
+        setSize(Gdx.graphics.getWidth() * 0.9f, Gdx.graphics.getHeight() * 0.025f);
         setPosition(x, y - getHeight());
         setOrigin(Align.center);
 
@@ -128,4 +128,5 @@ public class BaseProgressBar extends BaseActor {
             progress.setColor(color);
         }
     }
+
 }
