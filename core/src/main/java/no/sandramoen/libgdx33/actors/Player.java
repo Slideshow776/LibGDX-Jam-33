@@ -12,8 +12,8 @@ import no.sandramoen.libgdx33.utils.BaseGame;
 public class Player extends BaseActor {
 
     public boolean is_dead = false;
-    private float movementSpeed = 10f;
-    private float movementAcceleration = movementSpeed * 10f;
+    private float movementSpeed = 8f;
+    private float movementAcceleration = movementSpeed * 4f;
 
 
     public Player(float x, float y, Stage s) {

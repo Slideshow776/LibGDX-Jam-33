@@ -49,6 +49,7 @@ public class LevelScreen extends BaseScreen {
     private int score = 0; // your current score variable
 
     private boolean is_game_over = false;
+    private boolean is_pass_time = true;
 
     @Override
     public void initialize() {
@@ -72,7 +73,10 @@ public class LevelScreen extends BaseScreen {
 
     @Override
     public void update(float delta) {
-        if (player.isMoving() && !player.is_dead) {
+        if (
+            (player.isMoving() && !player.is_dead)
+            || is_pass_time
+        ) {
             game_time += delta;
 
             // update enemies
@@ -96,6 +100,11 @@ public class LevelScreen extends BaseScreen {
 
         increment_difficulty(delta);
         handle_score(delta);
+
+        if (Gdx.input.isKeyPressed(Keys.SPACE))
+            is_pass_time = true;
+        else
+            is_pass_time = false;
     }
 
 
@@ -136,11 +145,11 @@ public class LevelScreen extends BaseScreen {
             if (player.overlaps(water_pickup)) {
                 float roll = MathUtils.random();
                 if (roll <= 0.1f) {
-                    water_bar.incrementPercentage(30);
+                    water_bar.incrementPercentage(MathUtils.random(25, 45));
                 } else if (roll <= 0.5f) {
-                    water_bar.incrementPercentage(15);
+                    water_bar.incrementPercentage(MathUtils.random(10, 20));
                 } else {
-                    water_bar.incrementPercentage(5);
+                    water_bar.incrementPercentage(MathUtils.random(3, 7));
                 }
                 water_pickup.consume();
                 waterPickups.removeValue(water_pickup, false);
@@ -195,8 +204,8 @@ public class LevelScreen extends BaseScreen {
             lastEnemySpawnTime = game_time;
             enemies.add(new Enemy(mainStage));
 
-            water_consumption_rate -= 0.0125f;
-            water_spawn_interval -= 0.1f;
+            water_consumption_rate -= 0.009f;
+            water_spawn_interval -= 0.13f;
         }
     }
 
@@ -227,8 +236,8 @@ public class LevelScreen extends BaseScreen {
         water_bar.setProgress(75);
         water_bar.setColor(Color.BLUE);
         water_bar.setProgressBarColor(Color.CYAN);
-        water_bar.setOpacity(0.75f);
-        water_bar.progress.setOpacity(0.75f);
+        water_bar.setOpacity(0.5f);
+        water_bar.progress.setOpacity(0.5f);
         uiStage.addActor(water_bar);
 
         radiation_bar = new BaseProgressBar(Gdx.graphics.getWidth() * .51f, Gdx.graphics.getHeight() * 0.5f, uiStage);
@@ -236,8 +245,8 @@ public class LevelScreen extends BaseScreen {
         radiation_bar.setProgress(5);
         radiation_bar.setColor(Color.OLIVE);
         radiation_bar.setProgressBarColor(Color.GREEN);
-        radiation_bar.setOpacity(0.75f);
-        radiation_bar.progress.setOpacity(0.75f);
+        radiation_bar.setOpacity(0.5f);
+        radiation_bar.progress.setOpacity(0.5f);
         uiStage.addActor(radiation_bar);
 
         uiTable.defaults()

@@ -11,8 +11,8 @@ import no.sandramoen.libgdx33.utils.BaseGame;
 
 public class Enemy extends BaseActor {
 
-    private static final float MIN_MOVEMENT_SPEED = 2.5f;
-    private static final float MAX_MOVEMENT_SPEED = 10f;
+    private static final float MIN_MOVEMENT_SPEED = 2f;
+    private static final float MAX_MOVEMENT_SPEED = 8f;
 
     private float movementSpeed = 10f;
     private float movementAcceleration = movementSpeed * 10f;
