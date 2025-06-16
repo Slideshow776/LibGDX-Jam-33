@@ -45,6 +45,7 @@ public class BaseActor extends Group {
     public boolean isShakyCam = false;
 
     public final int ID = (ID_COUNTER++ % 9000) + 1000;
+    private static final com.badlogic.gdx.graphics.glutils.ShapeRenderer shapeRenderer = new com.badlogic.gdx.graphics.glutils.ShapeRenderer();
 
     public BaseActor(float x, float y, Stage stage) {
         super();
@@ -119,9 +120,35 @@ public class BaseActor extends Group {
                 );
         }
         super.draw(batch, parentAlpha);
+
+        // Draw collision polygon if debug enabled
+        if (boundaryPolygon != null && getDebug()) {
+            batch.end();  // end sprite batch before using ShapeRenderer
+
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+            shapeRenderer.begin(com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.RED);
+
+            Polygon poly = getBoundaryPolygon();
+            float[] vertices = poly.getTransformedVertices();
+            int n = vertices.length / 2;
+
+            for (int i = 0; i < n; i++) {
+                float x1 = vertices[i * 2];
+                float y1 = vertices[i * 2 + 1];
+                float x2 = vertices[((i + 1) % n) * 2];
+                float y2 = vertices[((i + 1) % n) * 2 + 1];
+                shapeRenderer.line(x1, y1, x2, y2);
+            }
+
+            shapeRenderer.end();
+
+            batch.begin();  // restart sprite batch for other drawing
+        }
     }
 
-    private void setAnimationSize(float width, float height) {
+    protected void setAnimationSize(float width, float height) {
         animationWidth = width;
         animationHeight = height;
     }
@@ -352,16 +379,28 @@ public class BaseActor extends Group {
         boundaryPolygon = new Polygon(vertices);
     }
 
-    public void setBoundaryPolygon(int numSides) {
-        float w = getWidth();
-        float h = getHeight();
+    public void setBoundaryPolygon(int numSides, float scale) {
+        float w = getWidth() * scale;
+        float h = getHeight() * scale;
 
         float[] vertices = new float[2 * numSides];
         for (int i = 0; i < numSides; i++) {
-            float angle = i * 6.28f / numSides;
-            vertices[2 * i] = w / 2 * MathUtils.cos(angle) + w / 2; // x-coordinate
-            vertices[2 * i + 1] = h / 2 * MathUtils.sin(angle) + h / 2; // y-coordinate
+            float angle = i * MathUtils.PI2 / numSides;
+            vertices[2 * i] = (w / 2) * MathUtils.cos(angle) + (getWidth() / 2);
+            vertices[2 * i + 1] = (h / 2) * MathUtils.sin(angle) + (getHeight() / 2);
         }
+        boundaryPolygon = new Polygon(vertices);
+    }
+
+
+
+    public void setCustomCollisionBox(float x, float y, float width, float height) {
+        float[] vertices = {
+            x, y,
+            x + width, y,
+            x + width, y + height,
+            x, y + height
+        };
         boundaryPolygon = new Polygon(vertices);
     }
 

@@ -18,15 +18,16 @@ public class Enemy extends BaseActor {
     private float angle = MathUtils.random(0f, 360f);
 
 
-    public Enemy(float x, float y, Stage s) {
-        super(x, y, s);
+    public Enemy(Stage s) {
+        super(0f, 0f, s);
 
         loadImage("yellow_triangle");
+        setDebug(true);
 
         // body
         setSize(1, 1);
-        centerAtPosition(x, y);
         setOrigin(Align.center);
+        setBoundaryPolygon(8, 0.5f);
 
         // spawn
         reset();
@@ -44,8 +45,8 @@ public class Enemy extends BaseActor {
         setRotation(getMotionAngle() - 90f);
 
         if (
-            Math.abs(getX()) > BaseGame.WORLD_WIDTH * 2 ||
-            Math.abs(getY()) > BaseGame.WORLD_HEIGHT * 2
+            Math.abs(getX()) > BaseGame.WORLD_WIDTH * 1.2f ||
+            Math.abs(getY()) > BaseGame.WORLD_HEIGHT * 1.2f
         ) {
             reset();
         }

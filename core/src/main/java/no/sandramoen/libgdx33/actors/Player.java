@@ -2,6 +2,7 @@ package no.sandramoen.libgdx33.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import no.sandramoen.libgdx33.utils.BaseActor;
@@ -17,11 +18,14 @@ public class Player extends BaseActor {
     public Player(float x, float y, Stage s) {
         super(x, y, s);
         loadImage("blue_circle");
+        setColor(Color.FOREST);
+        setDebug(true);
 
         // body
         setSize(1, 1);
         centerAtPosition(x, y);
         setOrigin(Align.center);
+        setBoundaryPolygon(8, 0.5f);
 
         setWorldBounds(BaseGame.WORLD_WIDTH + 0.5f, BaseGame.WORLD_HEIGHT);
 

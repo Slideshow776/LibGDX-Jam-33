@@ -2,6 +2,7 @@ package no.sandramoen.libgdx33.screens.gameplay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
 import no.sandramoen.libgdx33.actors.Background;
@@ -15,6 +16,11 @@ public class LevelScreen extends BaseScreen {
     private Player player;
     private Array<Enemy> enemies;
 
+    private float game_time = 0f;
+    private float lastEnemySpawnTime = 0f;
+    private float enemySpawnInterval = 10f;
+    private final float MIN_SPAWN_INTERVAL = 0.75f;
+
 
     @Override
     public void initialize() {
@@ -25,14 +31,15 @@ public class LevelScreen extends BaseScreen {
         player = new Player(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage);
 
         enemies = new Array<Enemy>();
-        for(int i = 0; i < 50; i++)
-            enemies.add(new Enemy(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage));
+        for(int i = 0; i < 5; i++)
+            enemies.add(new Enemy(mainStage));
     }
 
 
     @Override
     public void update(float delta) {
         if (player.isMoving()) {
+            game_time += delta;
             for (Enemy enemy : enemies) {
                 enemy.pause = false;
             }
@@ -41,8 +48,25 @@ public class LevelScreen extends BaseScreen {
                 enemy.pause = true;
             }
         }
-    }
 
+        // spawn enemies
+        float spawnInterval = Math.max(enemySpawnInterval - game_time * 0.15f, MIN_SPAWN_INTERVAL);
+        if (game_time - lastEnemySpawnTime >= spawnInterval) {
+            //System.out.println("added a new enemy, count: " + enemies.size + ", spawn interval: " + spawnInterval);
+            lastEnemySpawnTime = game_time;
+            enemies.add(new Enemy(mainStage));
+        }
+
+        // collision detection
+        for (Enemy enemy : enemies) {
+            if (player.overlaps(enemy)) {
+                player.setColor(Color.RED);
+                System.out.println("player collided with enemy: " + enemy);
+            }/* else {
+                player.setColor(Color.WHITE);
+            }*/
+        }
+    }
 
 
     @Override
