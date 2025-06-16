@@ -17,7 +17,6 @@ import no.sandramoen.libgdx33.actors.Player;
 import no.sandramoen.libgdx33.actors.WaterPickup;
 import no.sandramoen.libgdx33.gui.BaseProgressBar;
 import no.sandramoen.libgdx33.utils.AssetLoader;
-import no.sandramoen.libgdx33.utils.BaseActor;
 import no.sandramoen.libgdx33.utils.BaseGame;
 import no.sandramoen.libgdx33.utils.BaseScreen;
 
@@ -43,10 +42,13 @@ public class LevelScreen extends BaseScreen {
 
     private float water_spawn_interval = 5.0f;
     private float last_water_spawn_time = 0f;
+    private float water_consumption_rate = 0.41f;
 
     private float scoreUpdateTimer = 0f;
     private final float SCORE_UPDATE_INTERVAL = 2.5f; // update every 1 second, change `s` here
     private int score = 0; // your current score variable
+
+    private boolean is_game_over = false;
 
     @Override
     public void initialize() {
@@ -78,81 +80,22 @@ public class LevelScreen extends BaseScreen {
                 enemy.pause = false;
 
                 // collision detection
-                if (player.overlaps(enemy)) {
-                    player.kill();
-                    messageLabel.getColor().a = 1.0f;
-                }
-
-
+                if (player.overlaps(enemy))
+                    set_game_over();
             }
 
-            // create map lines
-            // spawn map line outside enemy loop!
-            last_map_line_spawn_time += delta;
-            if (last_map_line_spawn_time >= map_line_spawn_interval) {
-                MapLine map_line = new MapLine(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, mainStage);
-                map_line.setRotation(player.getMotionAngle());
-                map_line.setZIndex(map_background.getZIndex() + 1);
-                map_lines.add(map_line);
-                last_map_line_spawn_time = 0f;
-            }
-            for (MapLine map_line : map_lines)
-                map_line.pause = false;
-
-            // water
-            for (WaterPickup water_pickup : waterPickups) {
-                if (player.overlaps(water_pickup)) {
-                    water_bar.incrementPercentage(15);
-                    water_pickup.consume();
-                }
-            }
-
-            // consume water
-            if (!water_bar.progress.hasActions()) {
-                water_bar.decrementPercentage(1);
-            }
-
-            // create water
-            last_water_spawn_time += delta;
-            if (last_water_spawn_time >= water_spawn_interval) {
-                WaterPickup water_pickup = new WaterPickup(mainStage);
-                water_pickup.centerAtPosition(
-                    MathUtils.random(1f, BaseGame.WORLD_WIDTH - 1),
-                    MathUtils.random(1f, BaseGame.WORLD_HEIGHT - 1)
-                );
-                waterPickups.add(water_pickup);
-                last_water_spawn_time = 0f;
-            }
-
+            handle_map_lines(delta);
+            handle_water(delta);
 
         } else {
-            for (Enemy enemy : enemies) {
+            for (Enemy enemy : enemies)
                 enemy.pause = true;
-            }
-
             for (MapLine map_line : map_lines)
                 map_line.pause = true;
         }
 
-        // spawn enemies
-        float spawnInterval = Math.max(enemySpawnInterval - game_time * 0.15f, MIN_SPAWN_INTERVAL);
-        if (game_time - lastEnemySpawnTime >= spawnInterval) {
-            //System.out.println("added a new enemy, count: " + enemies.size + ", spawn interval: " + spawnInterval);
-            lastEnemySpawnTime = game_time;
-            enemies.add(new Enemy(mainStage));
-        }
-
-        // Update the score update timer
-        scoreUpdateTimer += delta;
-        if (scoreUpdateTimer >= SCORE_UPDATE_INTERVAL) {
-            scoreUpdateTimer -= SCORE_UPDATE_INTERVAL; // reset timer but keep overflow
-
-            // Update your score logic here (example just increments)
-            score += 1;
-
-            // Update the score label text
-            scoreLabel.setText(String.valueOf(score));
-        }
+        increment_difficulty(delta);
+        handle_score(delta);
     }
 
 
@@ -170,6 +113,90 @@ public class LevelScreen extends BaseScreen {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) { // 0 for left, 1 for right
         System.out.println("touch down");
         return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+
+    private void handle_map_lines(float delta) {
+        last_map_line_spawn_time += delta;
+        if (last_map_line_spawn_time >= map_line_spawn_interval) {
+            MapLine map_line = new MapLine(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, mainStage);
+            map_line.setRotation(player.getMotionAngle());
+            map_line.setZIndex(map_background.getZIndex() + 1);
+            map_lines.add(map_line);
+            last_map_line_spawn_time = 0f;
+        }
+        for (MapLine map_line : map_lines)
+            map_line.pause = false;
+    }
+
+
+    private void handle_water(float delta) {
+        // pick up water
+        for (WaterPickup water_pickup : waterPickups) {
+            if (player.overlaps(water_pickup)) {
+                water_bar.incrementPercentage(15);
+                water_pickup.consume();
+                waterPickups.removeValue(water_pickup, false);
+            }
+        }
+
+        // consume water
+        if (!water_bar.progress.hasActions()) {
+            water_bar.decrementPercentage(1, water_consumption_rate);
+        }
+
+        // create water
+        last_water_spawn_time += delta;
+        if (last_water_spawn_time >= water_spawn_interval) {
+            WaterPickup water_pickup = new WaterPickup(mainStage);
+            water_pickup.centerAtPosition(
+                MathUtils.random(1f, BaseGame.WORLD_WIDTH - 1),
+                MathUtils.random(1f, BaseGame.WORLD_HEIGHT - 1)
+            );
+            waterPickups.add(water_pickup);
+            last_water_spawn_time = 0f;
+        }
+
+        // dying from thirst
+        if (water_bar.level <= 0.1f) {
+            set_game_over();
+        }
+    }
+
+
+    private void handle_score(float delta) {
+        if (is_game_over)
+            return;
+
+        scoreUpdateTimer += delta;
+        if (scoreUpdateTimer >= SCORE_UPDATE_INTERVAL) {
+            scoreUpdateTimer -= SCORE_UPDATE_INTERVAL; // reset timer but keep overflow
+
+            // Update your score logic here (example just increments)
+            score += 1;
+
+            // Update the score label text
+            scoreLabel.setText(String.valueOf(score));
+        }
+    }
+
+
+    private void increment_difficulty(float _delta) {
+        float spawnInterval = Math.max(enemySpawnInterval - game_time * 0.15f, MIN_SPAWN_INTERVAL);
+        if (game_time - lastEnemySpawnTime >= spawnInterval) {
+            //System.out.println("added a new enemy, count: " + enemies.size + ", spawn interval: " + spawnInterval);
+            lastEnemySpawnTime = game_time;
+            enemies.add(new Enemy(mainStage));
+
+            water_consumption_rate -= 0.0125f;
+        }
+    }
+
+
+    private void set_game_over() {
+        is_game_over = true;
+        player.kill();
+        messageLabel.getColor().a = 1.0f;
     }
 
 

@@ -98,7 +98,7 @@ public class BaseProgressBar extends BaseActor {
     }
 
     // Decrement the progress bar by a certain percentage (in integer values)
-    public void decrementPercentage(int percentage) {
+    public void decrementPercentage(int percentage, float duration) {
         // Make sure the percentage is within the valid range [0, 100]
         level = Math.max(level - percentage, 0); // Clamp to 0%
 
@@ -108,9 +108,9 @@ public class BaseProgressBar extends BaseActor {
 
         Action action = Actions.sequence(
             Actions.delay(0.2f),
-            Actions.scaleTo(1.0f, 0.98f, 0.05f, Interpolation.bounceOut),
-            Actions.scaleTo(1.0f, 1.02f, 0.05f, Interpolation.bounceOut),
-            Actions.scaleTo(1.0f, 1.0f, 0.41f, Interpolation.bounceOut)
+            Actions.scaleTo(1.0f, 0.98f, duration * 0.12f, Interpolation.bounceOut),
+            Actions.scaleTo(1.0f, 1.02f, duration * 0.12f, Interpolation.bounceOut),
+            Actions.scaleTo(1.0f, 1.0f, duration, Interpolation.bounceOut)
         );
         addAction(action);
         progress.addAction(action);

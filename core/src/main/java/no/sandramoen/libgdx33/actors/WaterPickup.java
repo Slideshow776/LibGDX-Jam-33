@@ -13,7 +13,7 @@ public class WaterPickup extends BaseActor {
         setSize(0.5f, 0.8f);
         setOrigin(Align.center);
         setBoundaryPolygon(8, 0.8f);
-        setDebug(true);
+        // setDebug(true);
 
         float duration = 0.2f;
         addAction(Actions.forever(Actions.sequence(
