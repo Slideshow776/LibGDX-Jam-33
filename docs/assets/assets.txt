@@ -1,5 +1,5 @@
 d:assets:assets:0:application/unknown:1
-t:assets.txt:assets-99a505e473b61c81626227a5c40c83f7.txt:2229:text/plain:1
+t:assets.txt:assets-874413128c30de3dc1da1f7b0d6b228b.txt:1577:text/plain:1
 d:audio:audio:0:application/unknown:1
 d:audio/music:audio/music:0:application/unknown:1
 a:audio/music/361424__furbyguy__synth-metal-rock-loop.wav:audio/music/361424__furbyguy__synth-metal-rock-loop-12ae44643aff0a5db0cae4b5fcd986b6.wav:11289644:audio/x-wav:1
@@ -35,12 +35,6 @@ i:images/excluded/splash landscape.jpg:images/excluded/splash landscape-b58b72b9
 i:images/excluded/splash portrait.jpg:images/excluded/splash portrait-eaf3fe895e8053ecfccf687d9434c7fd.jpg:1249521:image/jpeg:1
 d:images/included:images/included:0:application/unknown:1
 i:images/included/blue_circle.png:images/included/blue_circle-ca09fa8ae3e5ca9f5b9bc9bf50027dca.png:1168:image/png:1
-d:images/included/enemy:images/included/enemy:0:application/unknown:1
-i:images/included/enemy/death_projectile.png:images/included/enemy/death_projectile-6f7d8aaeb5b3bda3b241c248c87da245.png:11839:image/png:1
-i:images/included/enemy/enemy.png:images/included/enemy/enemy-19cd9d6cdc9ca36f65266b5cd0056f2c.png:14658:image/png:1
-i:images/included/enemy/fire_projectile.png:images/included/enemy/fire_projectile-c781ff814ae8cf54afac9f9960698e2a.png:12263:image/png:1
-i:images/included/enemy/lightning_projectile.png:images/included/enemy/lightning_projectile-b2d9ac5d29a41586be6232815f26366e.png:8078:image/png:1
-i:images/included/libgdx.png:images/included/libgdx-3708f33d27b8977682d1bc8504e6a821.png:2458:image/png:1
 d:images/included/packed:images/included/packed:0:application/unknown:1
 t:images/included/packed/images.pack.atlas:images/included/packed/images.pack-aed01ed0ae25310d0dacf53c5bec44fa.atlas:2949:application/unknown:1
 i:images/included/packed/images.pack.png:images/included/packed/images.pack-13bc5131559744b3e5685c8d1a79b493.png:50074:image/png:1
@@ -51,21 +45,6 @@ i:images/included/packed/images.pack5.png:images/included/packed/images.pack5-b9
 i:images/included/packed/images.pack6.png:images/included/packed/images.pack6-8ce65dee041763d7f1fee6ac838bc9b1.png:11216:image/png:1
 i:images/included/packed/images.pack7.png:images/included/packed/images.pack7-2749d54971e5a769a461bea26c2c23a5.png:13438:image/png:1
 i:images/included/packed/images.pack8.png:images/included/packed/images.pack8-ce03ea8b2c54ce6a11e79448a6a2b838.png:8449:image/png:1
-d:images/included/parallax_backgrounds:images/included/parallax_backgrounds:0:application/unknown:1
-i:images/included/parallax_backgrounds/-1.png:images/included/parallax_backgrounds/-1-889023b0408520a2aab055c7619a9002.png:15241:image/png:1
-i:images/included/parallax_backgrounds/0.png:images/included/parallax_backgrounds/0-ab999f63c730572e21be514782892cf6.png:20433:image/png:1
-i:images/included/parallax_backgrounds/1.png:images/included/parallax_backgrounds/1-7448dc8c08e75307faa5762d734a6a02.png:17474:image/png:1
-i:images/included/parallax_backgrounds/2.png:images/included/parallax_backgrounds/2-5b980ae27179fd5d08d0cef4fe366afc.png:15666:image/png:1
-i:images/included/parallax_backgrounds/3.png:images/included/parallax_backgrounds/3-b53c5436d5a90e79cef7b6b8d1944d1a.png:15193:image/png:1
-i:images/included/parallax_backgrounds/4.png:images/included/parallax_backgrounds/4-f10196165dad07e9bc8600d1472a894f.png:16242:image/png:1
-d:images/included/player:images/included/player:0:application/unknown:1
-i:images/included/player/arm_test.png:images/included/player/arm_test-8323d5361f9a798020d8813f9430a92f.png:8963:image/png:1
-d:images/included/player/hud:images/included/player/hud:0:application/unknown:1
-i:images/included/player/hud/0.png:images/included/player/hud/0-de5be341bb18dde47ad8561c1d06d68b.png:60404:image/png:1
-i:images/included/player/player.png:images/included/player/player-066db704adc5806826744580f35161b4.png:13624:image/png:1
-i:images/included/player/projectile.png:images/included/player/projectile-013f8cbdffd42de6913c9aaf6b759930.png:8021:image/png:1
-i:images/included/player/shield.png:images/included/player/shield-0e92f77244744ba63e2f3d7d50085022.png:9373:image/png:1
-i:images/included/player.png:images/included/player-1c3ac1b78d8940235e53074e81ebd5fd.png:3153:image/png:1
 i:images/included/redKey.png:images/included/redKey-59162e30ab49cf65edcf5ddc278ee500.png:129:image/png:1
 i:images/included/whitePixel.png:images/included/whitePixel-de87a441c71a403f3db732f7870d5b10.png:1260:image/png:1
 i:images/included/yellow_triangle.png:images/included/yellow_triangle-87b5d7952738e9e7ff2f8ace3501ca24.png:1272:image/png:1
