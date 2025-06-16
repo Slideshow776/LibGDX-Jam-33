@@ -11,6 +11,7 @@ import no.sandramoen.libgdx33.utils.BaseGame;
 
 public class Player extends BaseActor {
 
+    public boolean is_dead = false;
     private float movementSpeed = 10f;
     private float movementAcceleration = movementSpeed * 10f;
 
@@ -19,7 +20,7 @@ public class Player extends BaseActor {
         super(x, y, s);
         loadImage("blue_circle");
         setColor(Color.FOREST);
-        setDebug(true);
+        //setDebug(true);
 
         // body
         setSize(1, 1);
@@ -40,6 +41,9 @@ public class Player extends BaseActor {
     public void act(float delta) {
         super.act(delta);
 
+        if (is_dead)
+            return;
+
         // poll keyboard
         if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP))
             accelerateAtAngle(90f);
@@ -57,6 +61,12 @@ public class Player extends BaseActor {
 
     public boolean isMoving() {
         return getSpeed() > 0.1f; // small threshold to avoid tiny jitter counts as moving
+    }
+
+
+    public void kill() {
+        setColor(Color.FIREBRICK);
+        is_dead = true;
     }
 
 }

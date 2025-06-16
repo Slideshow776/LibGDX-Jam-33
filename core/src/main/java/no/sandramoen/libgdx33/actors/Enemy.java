@@ -1,5 +1,6 @@
 package no.sandramoen.libgdx33.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
@@ -21,8 +22,9 @@ public class Enemy extends BaseActor {
     public Enemy(Stage s) {
         super(0f, 0f, s);
 
-        loadImage("yellow_triangle");
-        setDebug(true);
+        loadImage("triangle");
+        setColor(Color.FIREBRICK);
+        //setDebug(true);
 
         // body
         setSize(1, 1);
