@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.github.tommyettinger.textra.TextraLabel;
 import com.github.tommyettinger.textra.TypingLabel;
 
 import no.sandramoen.libgdx33.actors.Background;
@@ -21,7 +22,7 @@ import no.sandramoen.libgdx33.utils.BaseGame;
 import no.sandramoen.libgdx33.utils.BaseScreen;
 
 public class LevelScreen extends BaseScreen {
-    public static TypingLabel scoreLabel;
+    public static TextraLabel scoreLabel;
     public static TypingLabel messageLabel;
     public BaseProgressBar water_bar;
     public BaseProgressBar radiation_bar;
@@ -224,7 +225,7 @@ public class LevelScreen extends BaseScreen {
         float aspectRatio = calendar.getHeight() / calendar.getWidth();
         calendar.setSize(desiredWidth, desiredWidth * aspectRatio);
 
-        scoreLabel = new TypingLabel("0", AssetLoader.getLabelStyle("Play-Bold59white"));
+        scoreLabel = new TextraLabel("0", AssetLoader.getLabelStyle("Play-Bold59white"));
         scoreLabel.setAlignment(Align.center);
 
         messageLabel = new TypingLabel("{CROWD}press '{RAINBOW}R{ENDRAINBOW}' to restart", AssetLoader.getLabelStyle("Play-Bold59white"));
@@ -259,7 +260,7 @@ public class LevelScreen extends BaseScreen {
             .padBottom(-Gdx.graphics.getHeight() * .02f)
             .row();
 
-        uiTable.add(scoreLabel)
+        uiTable.add(scoreLabel).center()
             .height(scoreLabel.getPrefHeight() * 1.5f)
             .row()
         ;
