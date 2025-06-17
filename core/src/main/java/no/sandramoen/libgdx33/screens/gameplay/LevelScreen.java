@@ -34,6 +34,7 @@ public class LevelScreen extends BaseScreen {
     private Array<Enemy> enemies;
     private Array<MapLine> map_lines;
     private Array<WaterPickup> waterPickups;
+    private Array<RadiationZone> radiation_zones;
 
     private float game_time = 0f;
     private float lastEnemySpawnTime = 0f;
@@ -55,7 +56,9 @@ public class LevelScreen extends BaseScreen {
     private boolean is_game_over = false;
     private boolean is_pass_time = true;
 
-    private RadiationZone radiation_zone;
+    private float radiationSpawnInterval = 10f;
+    private float lastRadiationSpawnTime = MathUtils.random(0f, radiationSpawnInterval);
+    private float radiation_accumulation_rate = 0.5f; // lower for more difficult
 
 
     @Override
@@ -74,12 +77,7 @@ public class LevelScreen extends BaseScreen {
 
         map_lines = new Array<MapLine>();
         waterPickups = new Array<WaterPickup>();
-
-        radiation_zone = new RadiationZone(
-            Gdx.graphics.getWidth() / 2f,
-            Gdx.graphics.getHeight() / 2f
-        );
-
+        radiation_zones = new Array<RadiationZone>();
 
         initialize_gui();
     }
@@ -93,7 +91,9 @@ public class LevelScreen extends BaseScreen {
         ) {
             game_time += delta;
 
-            radiation_zone.update(game_time);
+            for (RadiationZone radiation_zone : radiation_zones) {
+                radiation_zone.update(game_time, delta);
+            }
 
             // update enemies
             for (Enemy enemy : enemies) {
@@ -104,14 +104,24 @@ public class LevelScreen extends BaseScreen {
                     set_game_over();
             }
 
-            if (radiation_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())) {
-                // Handle damage or effects here
-                System.out.println("player in radiation zone!");
+            for (RadiationZone radiation_zone : radiation_zones) {
+                if (radiation_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())) {
+                    if (!radiation_bar.progress.hasActions())
+                        radiation_bar.incrementPercentage(1, radiation_accumulation_rate);
+                    if (radiation_bar.level >= 100f)
+                        set_game_over();
+                }
+            }
+
+            // consume radiation
+            if (!radiation_bar.progress.hasActions()) {
+                radiation_bar.decrementPercentage(1, radiation_consumption_rate);
             }
 
             handle_map_lines(delta);
             handle_water(delta);
-            handle_radiation(delta);
+            handle_score(delta);
+            increment_difficulty(delta);
 
         } else {
             for (Enemy enemy : enemies)
@@ -120,8 +130,6 @@ public class LevelScreen extends BaseScreen {
                 map_line.pause = true;
         }
 
-        increment_difficulty(delta);
-        handle_score(delta);
 
         if (Gdx.input.isKeyPressed(Keys.SPACE))
             is_pass_time = true;
@@ -133,7 +141,9 @@ public class LevelScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        radiation_zone.draw(shape_renderer);
+        for (RadiationZone radiation_zone : radiation_zones) {
+            radiation_zone.draw(shape_renderer);
+        }
     }
 
 
@@ -149,7 +159,6 @@ public class LevelScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) { // 0 for left, 1 for right
-        System.out.println("touch down");
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -168,25 +177,17 @@ public class LevelScreen extends BaseScreen {
     }
 
 
-    private void handle_radiation(float _delta) {
-        // consume radiation
-        if (!radiation_bar.progress.hasActions()) {
-            radiation_bar.decrementPercentage(1, radiation_consumption_rate);
-        }
-    }
-
-
     private void handle_water(float delta) {
         // pick up water
         for (WaterPickup water_pickup : waterPickups) {
             if (player.overlaps(water_pickup)) {
                 float roll = MathUtils.random();
                 if (roll <= 0.1f) {
-                    water_bar.incrementPercentage(MathUtils.random(40, 60));
+                    water_bar.incrementPercentage(MathUtils.random(40, 60), 1.25f);
                 } else if (roll <= 0.5f) {
-                    water_bar.incrementPercentage(MathUtils.random(20, 30));
+                    water_bar.incrementPercentage(MathUtils.random(20, 30), 1.25f);
                 } else {
-                    water_bar.incrementPercentage(MathUtils.random(5, 10));
+                    water_bar.incrementPercentage(MathUtils.random(5, 10), 1.25f);
                 }
                 water_pickup.consume();
                 waterPickups.removeValue(water_pickup, false);
@@ -244,7 +245,64 @@ public class LevelScreen extends BaseScreen {
             water_consumption_rate -= 0.009f;
             water_spawn_interval -= 0.05f;
         }
+
+        lastRadiationSpawnTime += _delta;
+        if (lastRadiationSpawnTime >= radiationSpawnInterval) {
+            spawnRadiationZoneAtBorder();
+            lastRadiationSpawnTime = 0f;
+            if (radiation_consumption_rate >= 0f)
+                radiation_accumulation_rate -= 0.05f;
+        }
     }
+
+
+    private void spawnRadiationZoneAtBorder() {
+        float radiusX = MathUtils.random(40f, 300f);
+        float radiusY = radiusX + MathUtils.random(-25f, 25f);
+        float maxRadius = Math.max(radiusX, radiusY);
+
+        int edge = MathUtils.random(3); // 0=left, 1=top, 2=right, 3=bottom
+        float baseSpeed = 100f; // adjust this as you want max speed for smallest cloud
+
+        // speed inversely proportional to size: bigger = slower
+        float speed = baseSpeed * (40f / maxRadius);  // 40f is minimum radius, keep scaling reasonable
+
+        float x = 0, y = 0;
+        float speedX = 0f, speedY = 0f;
+        float offset = maxRadius;
+
+        switch (edge) {
+            case 0: // left edge
+                x = -offset;
+                y = MathUtils.random(0, Gdx.graphics.getHeight());
+                speedX = speed;  // move right
+                speedY = 0f;
+                break;
+            case 1: // top edge
+                x = MathUtils.random(0, Gdx.graphics.getWidth());
+                y = Gdx.graphics.getHeight() + offset;
+                speedX = 0f;
+                speedY = -speed; // move down
+                break;
+            case 2: // right edge
+                x = Gdx.graphics.getWidth() + offset;
+                y = MathUtils.random(0, Gdx.graphics.getHeight());
+                speedX = -speed; // move left
+                speedY = 0f;
+                break;
+            case 3: // bottom edge
+                x = MathUtils.random(0, Gdx.graphics.getWidth());
+                y = -offset;
+                speedX = 0f;
+                speedY = speed; // move up
+                break;
+        }
+
+        RadiationZone radiation_zone = new RadiationZone(x, y, speedX, speedY, radiusX, radiusY);
+        radiation_zones.add(radiation_zone);
+    }
+
+
 
 
     private void set_game_over() {
@@ -296,12 +354,7 @@ public class LevelScreen extends BaseScreen {
             .padBottom(-Gdx.graphics.getHeight() * .02f)
             .row();
 
-<<<<<<< HEAD
-        uiTable.add(scoreLabel)
-            .center()
-=======
         uiTable.add(scoreLabel).center()
->>>>>>> 2aa7178b96519f77304b7371a9ac761eef84a4a7
             .height(scoreLabel.getPrefHeight() * 1.5f)
             .row()
         ;

@@ -69,7 +69,7 @@ public class BaseProgressBar extends BaseActor {
 
 
     // Increment the progress bar by a certain percentage (in integer values)
-    public void incrementPercentage(int percentage) {
+    public void incrementPercentage(int percentage, float duration) {
         if (percentage == 0)
             return;
 
@@ -78,7 +78,7 @@ public class BaseProgressBar extends BaseActor {
 
         // Calculate the new width based on the level percentage
         float newWidth = (float) level / 100 * getWidth();
-        progress.addAction(Actions.sizeTo(newWidth, getHeight(), animationDuration));
+        progress.addAction(Actions.sizeTo(newWidth, getHeight(), duration));
 
         // Update the label with the new level
         label.setText(level + " / 100", true);
@@ -86,12 +86,11 @@ public class BaseProgressBar extends BaseActor {
             getWidth() * 0.5f - label.getFont().calculateSize(label.getWorkingLayout()) * 0.5f,
             getHeight() * 0.55f);
 
-
         Action action = Actions.sequence(
-            Actions.delay(0.2f),
-            Actions.scaleTo(1.0f, 1.1f, 0.2f, Interpolation.elasticOut),
-            Actions.scaleTo(1.0f, 0.9f, 0.2f, Interpolation.elasticOut),
-            Actions.scaleTo(1.0f, 1.0f, 1.25f, Interpolation.elasticOut)
+            Actions.delay(duration * 0.16f),
+            Actions.scaleTo(1.0f, 1.1f, duration * 0.16f, Interpolation.elasticOut),
+            Actions.scaleTo(1.0f, 0.9f, duration * 0.16f, Interpolation.elasticOut),
+            Actions.scaleTo(1.0f, 1.0f, duration, Interpolation.elasticOut)
         );
         addAction(action);
         progress.addAction(action);

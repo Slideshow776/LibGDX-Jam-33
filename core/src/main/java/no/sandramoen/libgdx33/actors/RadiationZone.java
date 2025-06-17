@@ -2,6 +2,7 @@ package no.sandramoen.libgdx33.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,13 +23,18 @@ public class RadiationZone {
     private float morphSpeed = 2f;       // Oscillation speed
     private float radiusX, radiusY;
 
+    private float speedX = 20f; // movement speed in pixels/second along X
+    private float speedY = 10f; // movement speed in pixels/second along Y
 
-    public RadiationZone(float centerX, float centerY) {
+
+    public RadiationZone(float centerX, float centerY, float speedX, float speedY, float radiusX, float radiusY) {
         this.centerX = centerX;
         this.centerY = centerY;
+        this.speedX = speedX;
+        this.speedY = speedY;
 
-        radiusX = MathUtils.random(40f, 200f);
-        radiusY = MathUtils.random(40f, 200f);
+        this.radiusX = radiusX;
+        this.radiusY = radiusY;
 
         numSides = MathUtils.random(12, 24);
 
@@ -45,7 +51,9 @@ public class RadiationZone {
 
 
     /** Call this every frame to update the polygon's shape */
-    public void update(float elapsedTime) {
+    public void update(float elapsedTime, float deltaTime) {
+        centerX += speedX * deltaTime;
+        centerY += speedY * deltaTime;
         updateVertices(elapsedTime);
     }
 
@@ -69,8 +77,10 @@ public class RadiationZone {
 
         // --- First pass: draw inside scratch lines ---
         Gdx.gl.glLineWidth(5f);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shape_renderer.begin(ShapeRenderer.ShapeType.Line);
-        shape_renderer.setColor(new Color(0f, 0.3f, 0f, 1f)); // dark green
+        shape_renderer.setColor(new Color(0f, 0.3f, 0f, 0.4f)); // dark green
 
         float spacing = 10f; // distance between scratch lines
         float angle = 45f;   // angle in degrees
@@ -131,7 +141,7 @@ public class RadiationZone {
         Gdx.gl.glLineWidth(20f);
         shape_renderer.begin(ShapeRenderer.ShapeType.Line);
 
-        shape_renderer.setColor(Color.GREEN);
+        shape_renderer.setColor(new Color(0f, 1f, 0f, 0.4f));
         shape_renderer.polygon(vertices);
 
         shape_renderer.end();
