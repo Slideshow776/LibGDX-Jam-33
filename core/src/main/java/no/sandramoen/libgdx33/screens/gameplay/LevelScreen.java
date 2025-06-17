@@ -18,6 +18,7 @@ import no.sandramoen.libgdx33.actors.MapLine;
 import no.sandramoen.libgdx33.actors.Player;
 import no.sandramoen.libgdx33.actors.RadiationZone;
 import no.sandramoen.libgdx33.actors.WaterPickup;
+import no.sandramoen.libgdx33.actors.WaterZone;
 import no.sandramoen.libgdx33.gui.BaseProgressBar;
 import no.sandramoen.libgdx33.utils.AssetLoader;
 import no.sandramoen.libgdx33.utils.BaseGame;
@@ -35,6 +36,7 @@ public class LevelScreen extends BaseScreen {
     private Array<MapLine> map_lines;
     private Array<WaterPickup> waterPickups;
     private Array<RadiationZone> radiation_zones;
+    private Array<WaterZone> water_zones;
 
     private float game_time = 0f;
     private float lastEnemySpawnTime = 0f;
@@ -60,6 +62,9 @@ public class LevelScreen extends BaseScreen {
     private float lastRadiationSpawnTime = MathUtils.random(0f, radiationSpawnInterval);
     private float radiation_accumulation_rate = 0.5f; // lower for more difficult
 
+    private float waterZoneSpawnInterval = 4f;
+    private float lastWaterZoneSpawnTime = 0f;
+
 
     @Override
     public void initialize() {
@@ -79,6 +84,8 @@ public class LevelScreen extends BaseScreen {
         waterPickups = new Array<WaterPickup>();
         radiation_zones = new Array<RadiationZone>();
 
+        water_zones = new Array<WaterZone>();
+
         initialize_gui();
     }
 
@@ -93,6 +100,10 @@ public class LevelScreen extends BaseScreen {
 
             for (RadiationZone radiation_zone : radiation_zones) {
                 radiation_zone.update(game_time, delta);
+            }
+
+            for (WaterZone water_zone : water_zones) {
+                water_zone.update(game_time, delta);
             }
 
             // update enemies
@@ -113,13 +124,46 @@ public class LevelScreen extends BaseScreen {
                 }
             }
 
+            for (WaterZone water_zone : water_zones) {
+                if (
+                    water_zone.isActive &&
+                    water_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())
+                ) {
+                    water_zone.shrinking = true;
+                    if (!water_bar.progress.hasActions())
+                        water_bar.incrementPercentage(1, 0.5f);
+                } else {
+                    water_zone.shrinking = false;
+                }
+            }
+
+            // consume water
+            if (!water_bar.progress.hasActions()) {
+                water_bar.decrementPercentage(1, water_consumption_rate);
+            }
+
             // consume radiation
             if (!radiation_bar.progress.hasActions()) {
                 radiation_bar.decrementPercentage(1, radiation_consumption_rate);
             }
 
+            lastWaterZoneSpawnTime += delta;
+            if (lastWaterZoneSpawnTime >= waterZoneSpawnInterval) {
+                spawnWaterZone();
+                lastWaterZoneSpawnTime = 0f;
+            }
+
+            for (int i = water_zones.size - 1; i >= 0; i--) {
+                WaterZone waterZone = water_zones.get(i);
+                waterZone.update(game_time, delta);
+                if (!waterZone.isActive) {
+                    water_zones.removeIndex(i);
+                }
+            }
+
+
             handle_map_lines(delta);
-            handle_water(delta);
+            //handle_water(delta);
             handle_score(delta);
             increment_difficulty(delta);
 
@@ -141,9 +185,10 @@ public class LevelScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        for (RadiationZone radiation_zone : radiation_zones) {
+        for (RadiationZone radiation_zone : radiation_zones)
             radiation_zone.draw(shape_renderer);
-        }
+        for (WaterZone water_zone : water_zones)
+            water_zone.draw(shape_renderer);
     }
 
 
@@ -161,6 +206,22 @@ public class LevelScreen extends BaseScreen {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) { // 0 for left, 1 for right
         return super.touchDown(screenX, screenY, pointer, button);
     }
+
+
+    private void spawnWaterZone() {
+        float radiusX = MathUtils.random(40f, 80f);
+        float radiusY = radiusX + MathUtils.random(-10f, 10f);
+        float speedX = 0f;
+        float speedY = 0f;
+
+        // Spawn somewhere inside the game world boundaries
+        float x = MathUtils.random(radiusX, Gdx.graphics.getWidth() - radiusX);
+        float y = MathUtils.random(radiusY, Gdx.graphics.getHeight() - radiusY);
+
+        WaterZone waterZone = new WaterZone(x, y, speedX, speedY, radiusX, radiusY);
+        water_zones.add(waterZone);
+    }
+
 
 
     private void handle_map_lines(float delta) {
@@ -301,8 +362,6 @@ public class LevelScreen extends BaseScreen {
         RadiationZone radiation_zone = new RadiationZone(x, y, speedX, speedY, radiusX, radiusY);
         radiation_zones.add(radiation_zone);
     }
-
-
 
 
     private void set_game_over() {
