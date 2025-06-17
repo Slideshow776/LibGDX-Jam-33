@@ -26,15 +26,12 @@ public class AssetLoader implements AssetErrorListener {
     public static String backgroundShader;
 
     public static Sound player_shoot_0_sound;
-    public static Sound player_heart_beat_sound;
-    public static Sound shield_up_sound;
-    public static Sound shield_down_sound;
-    public static Sound shield_hit_sound;
-    public static Sound enemy_shoot_0_sound;
 
     public static Array<Music> music;
     public static Music levelMusic;
     public static Music ambientMusic;
+    public static Music drinkingMusic;
+    public static Music radiationMusic;
 
     static {
         long time = System.currentTimeMillis();
@@ -67,16 +64,13 @@ public class AssetLoader implements AssetErrorListener {
         BaseGame.assetManager.load("images/included/packed/images.pack.atlas", TextureAtlas.class);
 
         // music
-        BaseGame.assetManager.load("audio/music/361424__furbyguy__synth-metal-rock-loop.wav", Music.class);
-        BaseGame.assetManager.load("audio/music/ambient_wind.wav", Music.class);
+        BaseGame.assetManager.load("audio/music/744138__thelastoneonearth__epic-middle-east-theme.ogg", Music.class);
+        BaseGame.assetManager.load("audio/music/457159__benbojangles__desert-binaural-wind.wav", Music.class);
+        BaseGame.assetManager.load("audio/music/201586__tjandrasounds__cat_drinking.wav", Music.class);
+        BaseGame.assetManager.load("audio/music/328381__leonelmail__radioactive-machine.mp3", Music.class);
 
         // sounds
-        BaseGame.assetManager.load("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
-        BaseGame.assetManager.load("audio/sounds/player/heart_beat.wav", Sound.class);
-        BaseGame.assetManager.load("audio/sounds/player/shield_down.wav", Sound.class);
-        BaseGame.assetManager.load("audio/sounds/player/shield_up.wav", Sound.class);
-        BaseGame.assetManager.load("audio/sounds/player/shield_hit.wav", Sound.class);
-        BaseGame.assetManager.load("audio/sounds/enemy/laser_0.wav", Sound.class);
+        //BaseGame.assetManager.load("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
 
         // i18n
 
@@ -103,17 +97,14 @@ public class AssetLoader implements AssetErrorListener {
 
         // music
         music = new Array();
-        levelMusic = BaseGame.assetManager.get("audio/music/361424__furbyguy__synth-metal-rock-loop.wav", Music.class);
-        ambientMusic = BaseGame.assetManager.get("audio/music/ambient_wind.wav", Music.class);
+        levelMusic = BaseGame.assetManager.get("audio/music/744138__thelastoneonearth__epic-middle-east-theme.ogg", Music.class);
+        ambientMusic = BaseGame.assetManager.get("audio/music/457159__benbojangles__desert-binaural-wind.wav", Music.class);
+        drinkingMusic = BaseGame.assetManager.get("audio/music/201586__tjandrasounds__cat_drinking.wav", Music.class);
+        radiationMusic = BaseGame.assetManager.get("audio/music/328381__leonelmail__radioactive-machine.mp3", Music.class);
         music.add(levelMusic);
 
         // sounds
-        player_shoot_0_sound = BaseGame.assetManager.get("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
-        player_heart_beat_sound = BaseGame.assetManager.get("audio/sounds/player/heart_beat.wav", Sound.class);
-        shield_up_sound = BaseGame.assetManager.get("audio/sounds/player/shield_up.wav", Sound.class);
-        shield_down_sound = BaseGame.assetManager.get("audio/sounds/player/shield_down.wav", Sound.class);
-        shield_hit_sound = BaseGame.assetManager.get("audio/sounds/player/shield_hit.wav", Sound.class);
-        enemy_shoot_0_sound = BaseGame.assetManager.get("audio/sounds/enemy/laser_0.wav", Sound.class);
+        //player_shoot_0_sound = BaseGame.assetManager.get("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
 
         // i18n
 

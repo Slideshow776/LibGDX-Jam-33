@@ -23,6 +23,7 @@ import no.sandramoen.libgdx33.gui.BaseProgressBar;
 import no.sandramoen.libgdx33.utils.AssetLoader;
 import no.sandramoen.libgdx33.utils.BaseGame;
 import no.sandramoen.libgdx33.utils.BaseScreen;
+import no.sandramoen.libgdx33.utils.GameUtils;
 
 public class LevelScreen extends BaseScreen {
     public static TextraLabel scoreLabel;
@@ -65,6 +66,9 @@ public class LevelScreen extends BaseScreen {
     private float waterZoneSpawnInterval = 4f;
     private float lastWaterZoneSpawnTime = 0f;
 
+    private float targetAmbientVolume = 0f;
+    private final float AMBIENT_FADE_SPEED = 2.0f; // adjust speed of fade here
+
 
     @Override
     public void initialize() {
@@ -87,6 +91,14 @@ public class LevelScreen extends BaseScreen {
         water_zones = new Array<WaterZone>();
 
         initialize_gui();
+        GameUtils.playLoopingMusic(AssetLoader.levelMusic);
+        GameUtils.playLoopingMusic(AssetLoader.ambientMusic);
+
+        GameUtils.playLoopingMusic(AssetLoader.drinkingMusic);
+        AssetLoader.drinkingMusic.setVolume(0f);
+
+        GameUtils.playLoopingMusic(AssetLoader.radiationMusic);
+        AssetLoader.radiationMusic.setVolume(0f);
     }
 
 
@@ -97,6 +109,9 @@ public class LevelScreen extends BaseScreen {
             || (is_pass_time && !is_game_over)
         ) {
             game_time += delta;
+            boolean is_drinking = false;
+            boolean is_radiation = false;
+            targetAmbientVolume = BaseGame.musicVolume;
 
             for (RadiationZone radiation_zone : radiation_zones) {
                 radiation_zone.update(game_time, delta);
@@ -117,8 +132,10 @@ public class LevelScreen extends BaseScreen {
 
             for (RadiationZone radiation_zone : radiation_zones) {
                 if (radiation_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())) {
-                    if (!radiation_bar.progress.hasActions())
+                    is_radiation = true;
+                    if (!radiation_bar.progress.hasActions()) {
                         radiation_bar.incrementPercentage(1, radiation_accumulation_rate);
+                    }
                     if (radiation_bar.level >= 100f)
                         set_game_over();
                 }
@@ -130,6 +147,7 @@ public class LevelScreen extends BaseScreen {
                     water_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())
                 ) {
                     water_zone.shrinking = true;
+                    is_drinking = true;
                     if (!water_bar.progress.hasActions())
                         water_bar.incrementPercentage(1, 0.5f);
                 } else {
@@ -140,6 +158,18 @@ public class LevelScreen extends BaseScreen {
             // consume water
             if (!water_bar.progress.hasActions()) {
                 water_bar.decrementPercentage(1, water_consumption_rate);
+            }
+
+            if (is_drinking && !is_game_over) {
+                AssetLoader.drinkingMusic.setVolume(BaseGame.soundVolume);
+            } else {
+                AssetLoader.drinkingMusic.setVolume(0f);
+            }
+
+            if (is_radiation && !is_game_over) {
+                AssetLoader.radiationMusic.setVolume(BaseGame.soundVolume);
+            } else {
+                AssetLoader.radiationMusic.setVolume(0f);
             }
 
             // consume radiation
@@ -170,8 +200,22 @@ public class LevelScreen extends BaseScreen {
         } else {
             for (Enemy enemy : enemies)
                 enemy.pause = true;
+
             for (MapLine map_line : map_lines)
                 map_line.pause = true;
+
+            targetAmbientVolume = 0f;
+        }
+
+
+        // Smoothly interpolate current volume towards target volume
+        float currentVolume = AssetLoader.ambientMusic.getVolume();
+        if (Math.abs(currentVolume - targetAmbientVolume) > 0.01f) {
+            float newVolume = MathUtils.lerp(currentVolume, targetAmbientVolume, AMBIENT_FADE_SPEED * delta);
+            AssetLoader.ambientMusic.setVolume(newVolume);
+        } else {
+            // Snap to target if very close to avoid floating point precision issues
+            AssetLoader.ambientMusic.setVolume(targetAmbientVolume);
         }
 
 
@@ -221,7 +265,6 @@ public class LevelScreen extends BaseScreen {
         WaterZone waterZone = new WaterZone(x, y, speedX, speedY, radiusX, radiusY);
         water_zones.add(waterZone);
     }
-
 
 
     private void handle_map_lines(float delta) {
