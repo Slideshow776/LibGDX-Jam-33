@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -15,6 +16,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     protected Stage mainStage;
     protected Stage uiStage;
     protected Table uiTable;
+    protected ShapeRenderer shape_renderer;
     private boolean pause;
 
     public BaseScreen() {
@@ -27,6 +29,8 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         uiStage = new Stage();
         uiStage.setViewport(new ScreenViewport());
         uiStage.addActor(uiTable);
+
+        shape_renderer = new ShapeRenderer();
 
         initialize();
     }
@@ -87,8 +91,12 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         pause = false;
     }
 
+
     @Override
     public void dispose() {
+        shape_renderer.dispose();
+        mainStage.dispose();
+        uiStage.dispose();
     }
 
 

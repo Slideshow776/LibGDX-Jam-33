@@ -4,16 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.github.tommyettinger.textra.TextraLabel;
 import com.github.tommyettinger.textra.TypingLabel;
 
 import no.sandramoen.libgdx33.actors.Background;
 import no.sandramoen.libgdx33.actors.Enemy;
 import no.sandramoen.libgdx33.actors.MapLine;
 import no.sandramoen.libgdx33.actors.Player;
+import no.sandramoen.libgdx33.actors.RadiationZone;
 import no.sandramoen.libgdx33.actors.WaterPickup;
 import no.sandramoen.libgdx33.gui.BaseProgressBar;
 import no.sandramoen.libgdx33.utils.AssetLoader;
@@ -21,7 +24,7 @@ import no.sandramoen.libgdx33.utils.BaseGame;
 import no.sandramoen.libgdx33.utils.BaseScreen;
 
 public class LevelScreen extends BaseScreen {
-    public static TypingLabel scoreLabel;
+    public static TextraLabel scoreLabel;
     public static TypingLabel messageLabel;
     public BaseProgressBar water_bar;
     public BaseProgressBar radiation_bar;
@@ -43,6 +46,7 @@ public class LevelScreen extends BaseScreen {
     private float water_spawn_interval = 5.0f;
     private float last_water_spawn_time = 0f;
     private float water_consumption_rate = 0.41f;
+    private float radiation_consumption_rate = 1.8f;
 
     private float scoreUpdateTimer = 0f;
     private final float SCORE_UPDATE_INTERVAL = 2.5f; // update every 1 second, change `s` here
@@ -51,10 +55,14 @@ public class LevelScreen extends BaseScreen {
     private boolean is_game_over = false;
     private boolean is_pass_time = true;
 
+    private RadiationZone radiation_zone;
+
+
     @Override
     public void initialize() {
         // background
         map_background = new Background(0f, 0f, mainStage);
+        //map_background.getColor().a = 0.0f;
 
         // characters
         player = new Player(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage);
@@ -67,6 +75,12 @@ public class LevelScreen extends BaseScreen {
         map_lines = new Array<MapLine>();
         waterPickups = new Array<WaterPickup>();
 
+        radiation_zone = new RadiationZone(
+            Gdx.graphics.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 2f
+        );
+
+
         initialize_gui();
     }
 
@@ -75,9 +89,11 @@ public class LevelScreen extends BaseScreen {
     public void update(float delta) {
         if (
             (player.isMoving() && !player.is_dead)
-            || is_pass_time
+            || (is_pass_time && !is_game_over)
         ) {
             game_time += delta;
+
+            radiation_zone.update(game_time);
 
             // update enemies
             for (Enemy enemy : enemies) {
@@ -88,8 +104,14 @@ public class LevelScreen extends BaseScreen {
                     set_game_over();
             }
 
+            if (radiation_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())) {
+                // Handle damage or effects here
+                System.out.println("player in radiation zone!");
+            }
+
             handle_map_lines(delta);
             handle_water(delta);
+            handle_radiation(delta);
 
         } else {
             for (Enemy enemy : enemies)
@@ -105,6 +127,13 @@ public class LevelScreen extends BaseScreen {
             is_pass_time = true;
         else
             is_pass_time = false;
+    }
+
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        radiation_zone.draw(shape_renderer);
     }
 
 
@@ -139,17 +168,25 @@ public class LevelScreen extends BaseScreen {
     }
 
 
+    private void handle_radiation(float _delta) {
+        // consume radiation
+        if (!radiation_bar.progress.hasActions()) {
+            radiation_bar.decrementPercentage(1, radiation_consumption_rate);
+        }
+    }
+
+
     private void handle_water(float delta) {
         // pick up water
         for (WaterPickup water_pickup : waterPickups) {
             if (player.overlaps(water_pickup)) {
                 float roll = MathUtils.random();
                 if (roll <= 0.1f) {
-                    water_bar.incrementPercentage(MathUtils.random(25, 45));
+                    water_bar.incrementPercentage(MathUtils.random(40, 60));
                 } else if (roll <= 0.5f) {
-                    water_bar.incrementPercentage(MathUtils.random(10, 20));
+                    water_bar.incrementPercentage(MathUtils.random(20, 30));
                 } else {
-                    water_bar.incrementPercentage(MathUtils.random(3, 7));
+                    water_bar.incrementPercentage(MathUtils.random(5, 10));
                 }
                 water_pickup.consume();
                 waterPickups.removeValue(water_pickup, false);
@@ -205,7 +242,7 @@ public class LevelScreen extends BaseScreen {
             enemies.add(new Enemy(mainStage));
 
             water_consumption_rate -= 0.009f;
-            water_spawn_interval -= 0.13f;
+            water_spawn_interval -= 0.05f;
         }
     }
 
@@ -224,7 +261,7 @@ public class LevelScreen extends BaseScreen {
         float aspectRatio = calendar.getHeight() / calendar.getWidth();
         calendar.setSize(desiredWidth, desiredWidth * aspectRatio);
 
-        scoreLabel = new TypingLabel("0", AssetLoader.getLabelStyle("Play-Bold59white"));
+        scoreLabel = new TextraLabel("0", AssetLoader.getLabelStyle("Play-Bold59white"));
         scoreLabel.setAlignment(Align.center);
 
         messageLabel = new TypingLabel("{CROWD}press '{RAINBOW}R{ENDRAINBOW}' to restart", AssetLoader.getLabelStyle("Play-Bold59white"));
@@ -242,7 +279,7 @@ public class LevelScreen extends BaseScreen {
 
         radiation_bar = new BaseProgressBar(Gdx.graphics.getWidth() * .51f, Gdx.graphics.getHeight() * 0.5f, uiStage);
         radiation_bar.rotateBy(90f);
-        radiation_bar.setProgress(5);
+        radiation_bar.setProgress(50);
         radiation_bar.setColor(Color.OLIVE);
         radiation_bar.setProgressBarColor(Color.GREEN);
         radiation_bar.setOpacity(0.5f);
@@ -260,6 +297,7 @@ public class LevelScreen extends BaseScreen {
             .row();
 
         uiTable.add(scoreLabel)
+            .center()
             .height(scoreLabel.getPrefHeight() * 1.5f)
             .row()
         ;
