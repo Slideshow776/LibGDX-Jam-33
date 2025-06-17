@@ -37,11 +37,12 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     public abstract void initialize();
 
+
     public abstract void update(float delta);
+
 
     @Override
     public void render(float delta) {
-        uiStage.act(delta);
         if (!pause) {
             mainStage.act(delta);
             update(delta);
@@ -53,9 +54,8 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         mainStage.getViewport().apply();
         mainStage.draw();
 
-        uiStage.getViewport().apply();
-        uiStage.draw();
     }
+
 
     @Override
     public void show() {

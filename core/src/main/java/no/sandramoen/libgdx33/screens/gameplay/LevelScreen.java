@@ -130,7 +130,7 @@ public class LevelScreen extends BaseScreen {
 
                 // collision detection
                 if (player.overlaps(enemy))
-                    set_game_over();
+                    set_game_over("killed by catworm!");
             }
 
             for (RadiationZone radiation_zone : radiation_zones) {
@@ -140,7 +140,7 @@ public class LevelScreen extends BaseScreen {
                         radiation_bar.incrementPercentage(1, radiation_accumulation_rate);
                     }
                     if (radiation_bar.level >= 100f)
-                        set_game_over();
+                        set_game_over("killed by radiation!");
                 }
             }
 
@@ -193,6 +193,10 @@ public class LevelScreen extends BaseScreen {
             }
 
 
+            if (water_bar.level <= 0) {
+                set_game_over("died of thirst!");
+            }
+
             handle_map_lines(delta);
             //handle_water(delta);
             handle_score(delta);
@@ -234,6 +238,10 @@ public class LevelScreen extends BaseScreen {
             radiation_zone.draw(shape_renderer);
         for (WaterZone water_zone : water_zones)
             water_zone.draw(shape_renderer);
+
+        uiStage.act(delta);
+        uiStage.getViewport().apply();
+        uiStage.draw();
     }
 
 
@@ -317,9 +325,6 @@ public class LevelScreen extends BaseScreen {
         }
 
         // dying from thirst
-        if (water_bar.level <= 0.1f) {
-            set_game_over();
-        }
     }
 
 
@@ -408,9 +413,10 @@ public class LevelScreen extends BaseScreen {
     }
 
 
-    private void set_game_over() {
+    private void set_game_over(String reason) {
         is_game_over = true;
         player.kill();
+        messageLabel.setText("{CROWD}press '{RAINBOW}R{ENDRAINBOW}' to restart\n{ENDCROWD}{SICK}{COLOR=#c30010}" + reason);
         messageLabel.getColor().a = 1.0f;
     }
 
