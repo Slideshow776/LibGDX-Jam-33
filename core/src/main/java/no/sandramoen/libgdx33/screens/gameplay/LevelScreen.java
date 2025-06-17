@@ -296,8 +296,12 @@ public class LevelScreen extends BaseScreen {
             .padBottom(-Gdx.graphics.getHeight() * .02f)
             .row();
 
+<<<<<<< HEAD
         uiTable.add(scoreLabel)
             .center()
+=======
+        uiTable.add(scoreLabel).center()
+>>>>>>> 2aa7178b96519f77304b7371a9ac761eef84a4a7
             .height(scoreLabel.getPrefHeight() * 1.5f)
             .row()
         ;
