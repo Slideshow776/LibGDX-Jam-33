@@ -21,6 +21,7 @@ import no.sandramoen.libgdx33.actors.WaterPickup;
 import no.sandramoen.libgdx33.actors.WaterZone;
 import no.sandramoen.libgdx33.gui.BaseProgressBar;
 import no.sandramoen.libgdx33.utils.AssetLoader;
+import no.sandramoen.libgdx33.utils.BaseActor;
 import no.sandramoen.libgdx33.utils.BaseGame;
 import no.sandramoen.libgdx33.utils.BaseScreen;
 import no.sandramoen.libgdx33.utils.GameUtils;
@@ -78,7 +79,7 @@ public class LevelScreen extends BaseScreen {
 
         // characters
         player = new Player(BaseGame.WORLD_WIDTH / 2, BaseGame.WORLD_HEIGHT / 2, mainStage);
-        player.setColor(Color.FOREST);
+        player.setColor(Color.WHITE);
 
         enemies = new Array<Enemy>();
         for(int i = 0; i < 5; i++)
@@ -418,6 +419,15 @@ public class LevelScreen extends BaseScreen {
         player.kill();
         messageLabel.setText("{CROWD}press '{RAINBOW}R{ENDRAINBOW}' to restart\n{ENDCROWD}{SICK}{COLOR=#c30010}" + reason);
         messageLabel.getColor().a = 1.0f;
+        create_skull(player.getX(), player.getY());
+    }
+
+
+    private void create_skull(float x, float y) {
+        BaseActor skull = new BaseActor(x, y, mainStage);
+        skull.loadImage("skull");
+        skull.setSize(0.75f, 0.75f);
+        skull.centerAtPosition(x + player.getWidth() / 2, y + player.getHeight() / 2);
     }
 
 

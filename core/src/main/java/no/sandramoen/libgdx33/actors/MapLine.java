@@ -16,8 +16,9 @@ public class MapLine extends BaseActor {
         setSize(.25f, 0.125f);
 
         addAction(Actions.sequence(
-            Actions.delay(1f),
-            Actions.fadeOut(1f)
+            Actions.delay(2f),
+            Actions.fadeOut(1f),
+            Actions.removeActor()
         ));
     }
 }

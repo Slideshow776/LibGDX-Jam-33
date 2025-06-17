@@ -18,8 +18,7 @@ public class Player extends BaseActor {
 
     public Player(float x, float y, Stage s) {
         super(x, y, s);
-        loadImage("blue_circle");
-        setColor(Color.FOREST);
+        loadImage("cross");
         //setDebug(true);
 
         // body
@@ -65,7 +64,7 @@ public class Player extends BaseActor {
 
 
     public void kill() {
-        setColor(Color.FIREBRICK);
+        setColor(Color.BLACK);
         is_dead = true;
     }
 

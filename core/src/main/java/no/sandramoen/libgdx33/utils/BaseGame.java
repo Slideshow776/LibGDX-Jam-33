@@ -7,6 +7,8 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 
 import no.sandramoen.libgdx33.screens.gameplay.LevelScreen;
 
@@ -42,6 +44,13 @@ public abstract class BaseGame extends Game implements AssetErrorListener {
         Gdx.input.setInputProcessor(new InputMultiplexer());
         loadGameState();
         new AssetLoader();
+
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("images/excluded/cursor.png"));
+        // Set hotspot to the middle of it (0,0 would be the top-left corner)
+        int xHotspot = 15, yHotspot = 15;
+        Cursor cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        pixmap.dispose(); // We don't need the pixmap anymore
+        Gdx.graphics.setCursor(cursor);
     }
 
     public static void setActiveScreen(BaseScreen screen) {
