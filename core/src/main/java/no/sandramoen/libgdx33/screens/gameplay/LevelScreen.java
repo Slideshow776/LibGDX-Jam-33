@@ -104,6 +104,9 @@ public class LevelScreen extends BaseScreen {
 
     @Override
     public void update(float delta) {
+        AssetLoader.drinkingMusic.setVolume(0f);
+
+        AssetLoader.radiationMusic.setVolume(0f);
         if (
             (player.isMoving() && !player.is_dead)
             || (is_pass_time && !is_game_over)
@@ -163,13 +166,11 @@ public class LevelScreen extends BaseScreen {
             if (is_drinking && !is_game_over) {
                 AssetLoader.drinkingMusic.setVolume(BaseGame.soundVolume);
             } else {
-                AssetLoader.drinkingMusic.setVolume(0f);
             }
 
             if (is_radiation && !is_game_over) {
                 AssetLoader.radiationMusic.setVolume(BaseGame.soundVolume);
             } else {
-                AssetLoader.radiationMusic.setVolume(0f);
             }
 
             // consume radiation
