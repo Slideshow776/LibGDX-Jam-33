@@ -70,6 +70,13 @@ public class LevelScreen extends BaseScreen {
     private float targetAmbientVolume = 0f;
     private final float AMBIENT_FADE_SPEED = 2.0f; // adjust speed of fade here
 
+    private final float MAX_WATER_ZONES = 5;
+
+    private float windAngle = MathUtils.random(360f);
+    private float windSpeed = 1.0f; // adjust as needed
+    private float windChangeTimer = 0f;
+    private final float WIND_CHANGE_INTERVAL = 3f; // seconds
+
 
     @Override
     public void initialize() {
@@ -203,6 +210,22 @@ public class LevelScreen extends BaseScreen {
             handle_score(delta);
             increment_difficulty(delta);
 
+            // Wind gradually changes direction
+            windChangeTimer += delta;
+            if (windChangeTimer >= WIND_CHANGE_INTERVAL) {
+                windAngle += MathUtils.random(-20f, 20f); // small random shift
+                windAngle = (windAngle + 360f) % 360f;
+                windSpeed = MathUtils.random(1f, 2f); // vary strength
+                windChangeTimer = 0f;
+                System.out.println(windSpeed);
+            }
+
+            // Wind effect
+            float windVelocityX = windSpeed * MathUtils.cosDeg(windAngle);
+            float windVelocityY = windSpeed * MathUtils.sinDeg(windAngle);
+
+            player.moveBy(windVelocityX * delta, windVelocityY * delta);
+
         } else {
             for (Enemy enemy : enemies)
                 enemy.pause = true;
@@ -263,6 +286,8 @@ public class LevelScreen extends BaseScreen {
 
 
     private void spawnWaterZone() {
+        if (water_zones.size > MAX_WATER_ZONES) return;
+
         float radiusX = MathUtils.random(40f, 80f);
         float radiusY = radiusX + MathUtils.random(-10f, 10f);
         float speedX = 0f;
