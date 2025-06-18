@@ -32,6 +32,9 @@ public class WaterZone {
     private static final float MIN_RADIUS = 5f;  // minimal radius before removal
     public boolean isActive = true;               // if false, don't draw or update
 
+    public static float inner_line_thickness = 5f;
+    public static float outer_line_thickness = 10f;
+
 
     public WaterZone(float centerX, float centerY, float speedX, float speedY, float radiusX, float radiusY) {
         this.centerX = centerX;
@@ -97,10 +100,9 @@ public class WaterZone {
         float[] vertices = bounds.getTransformedVertices();
 
         // --- First pass: draw inside scratch lines ---
-        Gdx.gl.glLineWidth(5f);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shape_renderer.begin(ShapeRenderer.ShapeType.Line);
+        shape_renderer.begin(ShapeRenderer.ShapeType.Filled); // use Filled for rectLine()
         shape_renderer.setColor(new Color(0f, 0.1f, 0.4f, 0.3f));
 
         float spacing = 10f; // distance between scratch lines
@@ -149,7 +151,7 @@ public class WaterZone {
                 boolean currInside = bounds.contains(currX, currY);
 
                 if (prevInside && currInside) {
-                    shape_renderer.line(prevX, prevY, currX, currY);
+                    shape_renderer.rectLine(prevX, prevY, currX, currY, inner_line_thickness);  // use your preferred thickness
                 }
                 prevX = currX;
                 prevY = currY;
@@ -158,15 +160,22 @@ public class WaterZone {
         }
         shape_renderer.end();
 
-        // --- Second pass: draw polygon border lines and center-to-vertex spokes ---
-        Gdx.gl.glLineWidth(20f);
-        shape_renderer.begin(ShapeRenderer.ShapeType.Line);
+        // --- Second pass: draw polygon border lines and spokes ---
+        shape_renderer.begin(ShapeRenderer.ShapeType.Filled);
+        shape_renderer.setColor(new Color(0f, 0.5f, 1f, 0.4f)); // bright blue
 
-        shape_renderer.setColor(new Color(0f, 0.5f, 1f, 0.4f)); // bright blue (instead of bright green)
-        shape_renderer.polygon(vertices);
+        // Draw border using rectLine
+        for (int i = 0; i < vertices.length; i += 2) {
+            float x1 = vertices[i];
+            float y1 = vertices[i + 1];
+            float x2 = vertices[(i + 2) % vertices.length];
+            float y2 = vertices[(i + 3) % vertices.length];
+            shape_renderer.rectLine(x1, y1, x2, y2, outer_line_thickness);  // outer border thickness
+        }
 
         shape_renderer.end();
     }
+
 
 
     public boolean overlaps(Polygon actorPolygon, Camera camera) {

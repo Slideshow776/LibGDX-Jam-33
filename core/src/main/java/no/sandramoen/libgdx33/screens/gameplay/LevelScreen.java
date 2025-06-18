@@ -107,6 +107,14 @@ public class LevelScreen extends BaseScreen {
 
         GameUtils.playLoopingMusic(AssetLoader.radiationMusic);
         AssetLoader.radiationMusic.setVolume(0f);
+
+        // shape-renderer line thickness
+        float inner_line_thickness = 4f;
+        RadiationZone.inner_line_thickness = inner_line_thickness;
+        WaterZone.inner_line_thickness = inner_line_thickness;
+        float outer_line_thickness = 8f;
+        RadiationZone.outer_line_thickness = outer_line_thickness;
+        WaterZone.outer_line_thickness = outer_line_thickness;
     }
 
 
@@ -210,21 +218,21 @@ public class LevelScreen extends BaseScreen {
             handle_score(delta);
             increment_difficulty(delta);
 
-            // Wind gradually changes direction
+            /*// Wind gradually changes direction
             windChangeTimer += delta;
             if (windChangeTimer >= WIND_CHANGE_INTERVAL) {
                 windAngle += MathUtils.random(-20f, 20f); // small random shift
                 windAngle = (windAngle + 360f) % 360f;
                 windSpeed = MathUtils.random(1f, 2f); // vary strength
                 windChangeTimer = 0f;
-                System.out.println(windSpeed);
+                System.out.println("wind changing direction" + windSpeed);
             }
 
             // Wind effect
             float windVelocityX = windSpeed * MathUtils.cosDeg(windAngle);
             float windVelocityY = windSpeed * MathUtils.sinDeg(windAngle);
 
-            player.moveBy(windVelocityX * delta, windVelocityY * delta);
+            player.moveBy(windVelocityX * delta, windVelocityY * delta);*/
 
         } else {
             for (Enemy enemy : enemies)
