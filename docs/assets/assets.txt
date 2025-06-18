@@ -1,12 +1,11 @@
 d:assets:assets:0:application/unknown:1
-t:assets.txt:assets-8840deb5a2b2851bb14847fd9f759302.txt:1399:text/plain:1
+t:assets.txt:assets-8d09096a3d59a838df26550263823289.txt:1478:text/plain:1
 d:audio:audio:0:application/unknown:1
 d:audio/music:audio/music:0:application/unknown:1
 a:audio/music/201586__tjandrasounds__cat_drinking.wav:audio/music/201586__tjandrasounds__cat_drinking-6aedc8a5c43154dc0776c0d35b771af8.wav:12266152:audio/x-wav:1
 a:audio/music/328381__leonelmail__radioactive-machine.mp3:audio/music/328381__leonelmail__radioactive-machine-8102ff33cd39e605223376237467d06d.mp3:539210:audio/mpeg:1
 a:audio/music/457159__benbojangles__desert-binaural-wind.wav:audio/music/457159__benbojangles__desert-binaural-wind-e282a834189af4d4f38c1731560b069e.wav:23891880:audio/x-wav:1
 a:audio/music/744138__thelastoneonearth__epic-middle-east-theme.ogg:audio/music/744138__thelastoneonearth__epic-middle-east-theme-9bf93be15ab0aedcce5f268dc0a35f67.ogg:3773203:audio/ogg:1
-d:audio/sounds:audio/sounds:0:application/unknown:1
 d:effects:effects:0:application/unknown:1
 b:effects/HitEffect.pfx:effects/HitEffect-fc551bf613a1de09caf298bd3ea72323.pfx:2287:application/unknown:1
 b:effects/ShieldEffect.pfx:effects/ShieldEffect-811926a63f263f76c15d0450f85b2617.pfx:2126:application/unknown:1
@@ -22,6 +21,7 @@ i:fonts/Play-Bold59white.png:fonts/Play-Bold59white-99eb3c2abb8977ef5e2481a78b1b
 b:fonts/Play-Regular.ttf:fonts/Play-Regular-a83df317dd89c7dd5388a152a26b2236.ttf:183928:application/unknown:1
 d:images:images:0:application/unknown:1
 d:images/excluded:images/excluded:0:application/unknown:1
+i:images/excluded/cursor.png:images/excluded/cursor-3eea9c2c1fe6799a5c951bafd654ca0f.png:3359:image/png:1
 i:images/excluded/icon_16x16.png:images/excluded/icon_16x16-a7876c505c5f6c7e3eba914e087d0b0e.png:1419:image/png:1
 i:images/excluded/icon_32x32.png:images/excluded/icon_32x32-eb04125643aa294c110a433cb8f0132e.png:3168:image/png:1
 i:images/excluded/icon_64x64.png:images/excluded/icon_64x64-3334a55472161f07be67fea70d2a84c8.png:8077:image/png:1
@@ -29,22 +29,20 @@ i:images/excluded/splash landscape.jpg:images/excluded/splash landscape-b58b72b9
 i:images/excluded/splash portrait.jpg:images/excluded/splash portrait-eaf3fe895e8053ecfccf687d9434c7fd.jpg:1249521:image/jpeg:1
 d:images/included:images/included:0:application/unknown:1
 i:images/included/blue_circle.png:images/included/blue_circle-e8350ff6e4746de5934c1731e98f6308.png:6856:image/png:1
-b:images/included/coralPixel.png~:images/included/coralPixel-1a959da19ff7ac8b2cdf957aa8a24539.png~:13794:application/unknown:1
+i:images/included/cross.png:images/included/cross-82ad6ce684aa31f483b7b9d891ba9593.png:5435:image/png:1
 d:images/included/gui:images/included/gui:0:application/unknown:1
 i:images/included/gui/calendar.png:images/included/gui/calendar-8ffb34fc4ee9f3449c79df6ce3e32ea8.png:121221:image/png:1
 i:images/included/gui/map.png:images/included/gui/map-138151a9c66eac99d7a27d809b8436c4.png:1237896:image/png:1
 d:images/included/packed:images/included/packed:0:application/unknown:1
-t:images/included/packed/images.pack.atlas:images/included/packed/images.pack-c56b261ffe15ad2c49c6b9166e36e6be.atlas:960:application/unknown:1
+t:images/included/packed/images.pack.atlas:images/included/packed/images.pack-bd85f9b06b7a4bf07c88e1a650569158.atlas:1154:application/unknown:1
 i:images/included/packed/images.pack.png:images/included/packed/images.pack-48282f4cbae69d7e28f5b184759fbfd5.png:1600234:image/png:1
-i:images/included/packed/images.pack2.png:images/included/packed/images.pack2-371bfa28a8dc9012157c51cb8bb2dada.png:269255:image/png:1
-d:images/included/parallax_backgrounds:images/included/parallax_backgrounds:0:application/unknown:1
-b:images/included/player_test.png~:images/included/player_test-5a75c209b51e22190ca023b7b0ced497.png~:29074:application/unknown:1
+i:images/included/packed/images.pack2.png:images/included/packed/images.pack2-c69be82a5973ed0f6249541b96aedb17.png:300685:image/png:1
 i:images/included/redKey.png:images/included/redKey-59162e30ab49cf65edcf5ddc278ee500.png:129:image/png:1
+i:images/included/skull.png:images/included/skull-f0e95a4a9f03d1b1f6ad9bf81dee2d4c.png:18224:image/png:1
 i:images/included/triangle.png:images/included/triangle-36c8e52a598b0d8bd1c1d46ea53f083b.png:6567:image/png:1
 i:images/included/water_bottle.png:images/included/water_bottle-12803f1795c5dbcbb043fac000faead8.png:76415:image/png:1
 i:images/included/whitePixel.png:images/included/whitePixel-de87a441c71a403f3db732f7870d5b10.png:1260:image/png:1
 i:images/included/yellow_triangle.png:images/included/yellow_triangle-87b5d7952738e9e7ff2f8ace3501ca24.png:1272:image/png:1
-b:images/included/yellow_triangle.png~:images/included/yellow_triangle-a501603d88d357c07e168a35fa928931.png~:1260:application/unknown:1
 d:maps:maps:0:application/unknown:1
 i:maps/assets.png:maps/assets-feeee9670af52f9b230cb5e005b358f3.png:607:image/png:1
 b:maps/level1.tmx:maps/level1-4fb9d2839043a597b3a320b698f20d0b.tmx:1309:application/unknown:1
@@ -64,7 +62,7 @@ i:skins/mySkin/mySkin.png:skins/mySkin/mySkin-1d3ff609e8981cc82eb13f49c9443779.p
 t:skins/mySkin/Play-Bold20white.fnt:skins/mySkin/Play-Bold20white-806891eff3f594129ffd7887f701986a.fnt:21264:application/unknown:1
 t:skins/mySkin/Play-Bold40white.fnt:skins/mySkin/Play-Bold40white-d79fdc6adb81a9ca2a92858ef34f7b9b.fnt:21265:application/unknown:1
 t:skins/mySkin/Play-Bold59white.fnt:skins/mySkin/Play-Bold59white-34aafd2cc14443caabd2032c23be0076.fnt:21265:application/unknown:1
-t:skins/mySkin/Play-Bold96white.fnt:skins/mySkin/Play-Bold96white-2d18bb7f433ab22a7f2643ffef06f818.fnt:11285:application/unknown:1
+t:skins/mySkin/Play-Bold96white.fnt:skins/mySkin/Play-Bold96white-be28d345ed934abf32cc41da53db95d2.fnt:11181:application/unknown:1
 t:com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:particles.fragment-b90524761fdf09b0a836056d590c30b8.glsl:820:application/unknown:1
 t:com/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl:particles.vertex-f25b8b2fae10b9bfa09bfdd484923148.glsl:2886:application/unknown:1
 t:com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:default.fragment-e1c018bd48044c8b67c7bbc53145e540.glsl:5874:application/unknown:1
