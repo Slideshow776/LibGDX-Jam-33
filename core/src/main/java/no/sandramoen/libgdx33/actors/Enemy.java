@@ -3,8 +3,10 @@ package no.sandramoen.libgdx33.actors;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
+import no.sandramoen.libgdx33.actors.particles.EffectEnemyMovement;
 import no.sandramoen.libgdx33.utils.BaseActor;
 import no.sandramoen.libgdx33.utils.BaseGame;
 
@@ -22,17 +24,35 @@ public class Enemy extends BaseActor {
     public Enemy(Stage s) {
         super(0f, 0f, s);
 
-        loadImage("triangle");
-        setColor(Color.FIREBRICK);
+        loadImage("cat_normal");
+        //setColor(Color.FIREBRICK);
         //setDebug(true);
 
         // body
-        setSize(1, 1);
+        float width = MathUtils.random(0.75f, 1.25f);
+        float height = 2 * width;
+        setSize(width, height);
+        //setDebug(true);
         setOrigin(Align.center);
         setBoundaryPolygon(8, 0.5f);
 
         // spawn
         reset();
+
+        float duration = 2.5f * 1 / movementSpeed;
+        //System.out.println("movement speed: " + movementSpeed + ", duration: " + duration);
+        addAction(Actions.forever(Actions.sequence(
+            Actions.delay(duration),
+            Actions.run( () -> {flip();}),
+            Actions.delay(duration),
+            Actions.run( () -> {flip();})
+        )));
+
+        EffectEnemyMovement effect = new EffectEnemyMovement();
+        effect.setScale(0.005f);
+        effect.setPosition((getWidth() / 2) - 0.2f, getHeight() * 0.5f);
+        effect.start();
+        addActor(effect);
     }
 
 
