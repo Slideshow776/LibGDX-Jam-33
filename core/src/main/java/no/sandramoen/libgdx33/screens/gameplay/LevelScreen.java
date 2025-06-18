@@ -161,6 +161,17 @@ public class LevelScreen extends BaseScreen {
             }
 
             for (WaterZone water_zone : water_zones) {
+                for (Enemy enemy : enemies) {
+                    if (
+                        water_zone.isActive &&
+                            water_zone.overlaps(enemy.getBoundaryPolygon(), mainStage.getCamera())
+                    ) {
+                        AssetLoader.cat_meows.random().play(BaseGame.soundVolume, MathUtils.random(0.8f, 1.2f), 0f);
+                        enemies.removeValue(enemy, true);
+                        enemy.remove();
+                    }
+                }
+
                 if (
                     water_zone.isActive &&
                     water_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())

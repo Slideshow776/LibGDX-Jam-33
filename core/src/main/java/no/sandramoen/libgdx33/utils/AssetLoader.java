@@ -26,6 +26,7 @@ public class AssetLoader implements AssetErrorListener {
     public static String backgroundShader;
 
     public static Sound player_shoot_0_sound;
+    public static Array<Sound> cat_meows;
 
     public static Array<Music> music;
     public static Music levelMusic;
@@ -38,6 +39,8 @@ public class AssetLoader implements AssetErrorListener {
         BaseGame.assetManager = new AssetManager();
         BaseGame.assetManager. setLoader(Skin. class, new FWSkinLoader(BaseGame.assetManager. getFileHandleResolver()));
         BaseGame.assetManager.setErrorListener(new AssetLoader());
+
+        cat_meows = new Array<Sound>();
 
         loadAssets();
         BaseGame.assetManager.finishLoading();
@@ -71,6 +74,8 @@ public class AssetLoader implements AssetErrorListener {
 
         // sounds
         //BaseGame.assetManager.load("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
+        for (int i = 0; i <= 6; i++)
+            BaseGame.assetManager.load("audio/sounds/cat/meow_" + i + ".mp3", Sound.class);
 
         // i18n
 
@@ -105,6 +110,8 @@ public class AssetLoader implements AssetErrorListener {
 
         // sounds
         //player_shoot_0_sound = BaseGame.assetManager.get("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
+        for (int i = 0; i <= 6; i++)
+            cat_meows.add(BaseGame.assetManager.get("audio/sounds/cat/meow_" + i + ".mp3", Sound.class));
 
         // i18n
 
