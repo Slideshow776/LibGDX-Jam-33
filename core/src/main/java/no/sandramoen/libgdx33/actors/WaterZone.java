@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector3;
 public class WaterZone {
 
     private Polygon bounds;
-    private float radius;
     private int numSides;
     private float centerX, centerY;
 

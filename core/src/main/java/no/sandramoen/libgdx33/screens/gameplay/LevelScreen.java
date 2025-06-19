@@ -161,13 +161,16 @@ public class LevelScreen extends BaseScreen {
             }
 
             for (WaterZone water_zone : water_zones) {
-                for (Enemy enemy : enemies) {
+                // Using the iterator allows us to call iterator.remove(), which is safe to call even when
+                // removing multiple enemies in one frame.
+                for (Array.ArrayIterator<Enemy> iterator = enemies.iterator(); iterator.hasNext(); ) {
+                    Enemy enemy = iterator.next();
                     if (
                         water_zone.isActive &&
                             water_zone.overlaps(enemy.getBoundaryPolygon(), mainStage.getCamera())
                     ) {
                         AssetLoader.cat_meows.random().play(BaseGame.soundVolume, MathUtils.random(0.8f, 1.2f), 0f);
-                        enemies.removeValue(enemy, true);
+                        iterator.remove();
                         enemy.remove();
                     }
                 }
@@ -192,12 +195,10 @@ public class LevelScreen extends BaseScreen {
 
             if (is_drinking && !is_game_over) {
                 AssetLoader.drinkingMusic.setVolume(BaseGame.soundVolume);
-            } else {
             }
 
             if (is_radiation && !is_game_over) {
                 AssetLoader.radiationMusic.setVolume(BaseGame.soundVolume);
-            } else {
             }
 
             // consume radiation
@@ -267,10 +268,11 @@ public class LevelScreen extends BaseScreen {
         }
 
 
-        if (Gdx.input.isKeyPressed(Keys.SPACE))
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             is_pass_time = true;
-        else
+        } else {
             is_pass_time = false;
+        }
     }
 
 
