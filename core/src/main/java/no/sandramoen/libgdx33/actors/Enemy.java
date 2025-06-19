@@ -1,12 +1,15 @@
 package no.sandramoen.libgdx33.actors;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
 import no.sandramoen.libgdx33.actors.particles.EffectEnemyMovement;
+import no.sandramoen.libgdx33.utils.AssetLoader;
 import no.sandramoen.libgdx33.utils.BaseActor;
 import no.sandramoen.libgdx33.utils.BaseGame;
 
@@ -19,6 +22,10 @@ public class Enemy extends BaseActor {
     private float movementSpeed = 10f;
     private float movementAcceleration = movementSpeed * 10f;
     private float angle = MathUtils.random(0f, 360f);
+    public Music purrSound = AssetLoader.catPurrMusic;
+
+    private EffectEnemyMovement effect;
+    public boolean is_dead = false;
 
 
     public Enemy(Stage s) {
@@ -36,6 +43,12 @@ public class Enemy extends BaseActor {
         setOrigin(Align.center);
         setBoundaryPolygon(8, 0.5f);
 
+        effect = new EffectEnemyMovement();
+        effect.setScale(0.005f);
+        effect.setPosition((getWidth() / 2) - 0.2f, getHeight() * 0.5f);
+        effect.start();
+        addActor(effect);
+
         // spawn
         reset();
 
@@ -48,11 +61,9 @@ public class Enemy extends BaseActor {
             Actions.run( () -> {flip();})
         )));
 
-        EffectEnemyMovement effect = new EffectEnemyMovement();
-        effect.setScale(0.005f);
-        effect.setPosition((getWidth() / 2) - 0.2f, getHeight() * 0.5f);
-        effect.start();
-        addActor(effect);
+        purrSound.isLooping();
+        purrSound.play();
+        purrSound.setVolume(0f);
     }
 
 
@@ -76,15 +87,25 @@ public class Enemy extends BaseActor {
 
 
     private void reset() {
+        effect.stop();
+        is_dead = false;
         setPositionAtEdge();
 
         // Randomize movement speed
         movementSpeed = MathUtils.random(MIN_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED);
         movementAcceleration = movementSpeed * 10f;
 
+
+        float width = MathUtils.random(0.75f, 1.25f);
+        float height = 2 * width;
+        setSize(width, height);
+        setBoundaryPolygon(8, 0.5f);
+
         setMaxSpeed(movementSpeed);
         setAcceleration(movementAcceleration);
         setDeceleration(movementAcceleration);
+
+        effect.start();
     }
 
 

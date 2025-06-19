@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -19,6 +19,7 @@ import no.sandramoen.libgdx33.actors.Player;
 import no.sandramoen.libgdx33.actors.RadiationZone;
 import no.sandramoen.libgdx33.actors.WaterPickup;
 import no.sandramoen.libgdx33.actors.WaterZone;
+import no.sandramoen.libgdx33.actors.particles.EffectWaterSplash;
 import no.sandramoen.libgdx33.gui.BaseProgressBar;
 import no.sandramoen.libgdx33.utils.AssetLoader;
 import no.sandramoen.libgdx33.utils.BaseActor;
@@ -42,7 +43,7 @@ public class LevelScreen extends BaseScreen {
 
     private float game_time = 0f;
     private float lastEnemySpawnTime = 0f;
-    private float enemySpawnInterval = 10f;
+    private float enemySpawnInterval = 12f;
     private final float MIN_SPAWN_INTERVAL = 0.5f;
 
     private float map_line_spawn_interval = 0.075f;
@@ -60,7 +61,7 @@ public class LevelScreen extends BaseScreen {
     private boolean is_game_over = false;
     private boolean is_pass_time = true;
 
-    private float radiationSpawnInterval = 10f;
+    private float radiationSpawnInterval = 12f;
     private float lastRadiationSpawnTime = MathUtils.random(0f, radiationSpawnInterval);
     private float radiation_accumulation_rate = 0.5f; // lower for more difficult
 
@@ -76,6 +77,8 @@ public class LevelScreen extends BaseScreen {
     private float windSpeed = 1.0f; // adjust as needed
     private float windChangeTimer = 0f;
     private final float WIND_CHANGE_INTERVAL = 3f; // seconds
+
+    private BaseActor overlay;
 
 
     @Override
@@ -115,6 +118,17 @@ public class LevelScreen extends BaseScreen {
         float outer_line_thickness = 8f;
         RadiationZone.outer_line_thickness = outer_line_thickness;
         WaterZone.outer_line_thickness = outer_line_thickness;
+
+        overlay = new BaseActor(0f, 0f, mainStage);
+        overlay.loadImage("whitePixel");
+        overlay.setSize(BaseGame.WORLD_WIDTH + 2, BaseGame.WORLD_HEIGHT + 2);
+        overlay.setPosition(-1, -1);
+
+        float overlay_colour = 0.0f;
+        overlay.setColor(new Color(overlay_colour, overlay_colour, overlay_colour, 1.0f));
+
+        overlay.addAction(Actions.alpha(0.5f, 0f));
+        overlay.addAction(Actions.alpha(0.0f, 0.5f));
     }
 
 
@@ -150,6 +164,23 @@ public class LevelScreen extends BaseScreen {
             }
 
             for (RadiationZone radiation_zone : radiation_zones) {
+                for (Enemy enemy : enemies) {
+                    if (radiation_zone.overlaps(enemy.getBoundaryPolygon(), mainStage.getCamera())) {
+                        enemy.setSize(
+                            enemy.getWidth() + 0.005f,
+                            enemy.getHeight() + 0.005f
+                        );
+                        enemy.setBoundaryPolygon(8, 0.5f);
+                        if (!enemy.purrSound.isPlaying()) {
+                            enemy.purrSound.setVolume(BaseGame.soundVolume);
+                        }
+                    } else {
+                        if (enemy.purrSound.isPlaying()) {
+                            enemy.purrSound.setVolume(0f);
+                        }
+                    }
+                }
+
                 if (radiation_zone.overlaps(player.getBoundaryPolygon(), mainStage.getCamera())) {
                     is_radiation = true;
                     if (!radiation_bar.progress.hasActions()) {
@@ -166,9 +197,26 @@ public class LevelScreen extends BaseScreen {
                         water_zone.isActive &&
                             water_zone.overlaps(enemy.getBoundaryPolygon(), mainStage.getCamera())
                     ) {
-                        AssetLoader.cat_meows.random().play(BaseGame.soundVolume, MathUtils.random(0.8f, 1.2f), 0f);
+                        AssetLoader.cat_meow_sounds.random().play(BaseGame.soundVolume, MathUtils.random(0.8f, 1.2f), 0f);
+                        AssetLoader.splashSound.play(BaseGame.soundVolume * 0.5f, MathUtils.random(0.5f, 0.8f), 0f);
+
+                        if (!enemy.is_dead) {
+                            System.out.println("water effect!");
+                            EffectWaterSplash effect = new EffectWaterSplash();
+                            effect.setScale(0.005f);
+                            effect.start();
+                            effect.addAction(Actions.sequence(
+                                Actions.delay(0.75f),
+                                Actions.removeActor()
+                            ));
+                            effect.setPosition(enemy.getX() + enemy.getWidth() / 2, enemy.getY() + enemy.getHeight() / 2);
+                            mainStage.addActor(effect);
+                        }
+
+                        enemy.is_dead = true;
                         enemies.removeValue(enemy, true);
                         enemy.remove();
+
                     }
                 }
 
@@ -322,6 +370,9 @@ public class LevelScreen extends BaseScreen {
 
 
     private void handle_map_lines(float delta) {
+        if (!player.isMoving())
+            return;
+
         last_map_line_spawn_time += delta;
         if (last_map_line_spawn_time >= map_line_spawn_interval) {
             MapLine map_line = new MapLine(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, mainStage);
@@ -391,7 +442,7 @@ public class LevelScreen extends BaseScreen {
 
 
     private void increment_difficulty(float _delta) {
-        float spawnInterval = Math.max(enemySpawnInterval - game_time * 0.15f, MIN_SPAWN_INTERVAL);
+        float spawnInterval = Math.max(enemySpawnInterval - game_time * 0.125f, MIN_SPAWN_INTERVAL);
         if (game_time - lastEnemySpawnTime >= spawnInterval) {
             //System.out.println("added a new enemy, count: " + enemies.size + ", spawn interval: " + spawnInterval);
             lastEnemySpawnTime = game_time;
@@ -406,7 +457,7 @@ public class LevelScreen extends BaseScreen {
             spawnRadiationZoneAtBorder();
             lastRadiationSpawnTime = 0f;
             if (radiation_consumption_rate >= 0f)
-                radiation_accumulation_rate -= 0.05f;
+                radiation_accumulation_rate -= 0.01f;
         }
     }
 
@@ -464,6 +515,8 @@ public class LevelScreen extends BaseScreen {
         messageLabel.setText("{CROWD}press '{RAINBOW}R{ENDRAINBOW}' to restart\n{ENDCROWD}{SICK}{COLOR=#c30010}" + reason);
         messageLabel.getColor().a = 1.0f;
         create_skull(player.getX(), player.getY());
+
+        overlay.addAction(Actions.alpha(0.5f, 0.5f));
     }
 
 
@@ -478,7 +531,7 @@ public class LevelScreen extends BaseScreen {
     private void initialize_gui() {
         Image calendar = new Image(new Texture("images/included/gui/calendar.png"));
 
-        float desiredWidth = 40f; // or whatever fits your layout
+        float desiredWidth = 50f; // or whatever fits your layout
         float aspectRatio = calendar.getHeight() / calendar.getWidth();
         calendar.setSize(desiredWidth, desiredWidth * aspectRatio);
 
@@ -514,11 +567,12 @@ public class LevelScreen extends BaseScreen {
         uiTable.add(calendar)
             .width(calendar.getWidth())
             .height(calendar.getHeight())
-            .padBottom(-Gdx.graphics.getHeight() * .02f)
+            .padBottom(Gdx.graphics.getHeight() * -.015f)
             .row();
 
         uiTable.add(scoreLabel).center()
             .height(scoreLabel.getPrefHeight() * 1.5f)
+            .padTop(-Gdx.graphics.getHeight() * 0.005f)
             .row()
         ;
 

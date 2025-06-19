@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
 
+import no.sandramoen.libgdx33.utils.AssetLoader;
+import no.sandramoen.libgdx33.utils.BaseGame;
+
 public class WaterZone {
 
     private Polygon bounds;
@@ -70,6 +73,7 @@ public class WaterZone {
                 radiusX = 0;
                 radiusY = 0;
                 isActive = false;  // deactivate the zone
+                AssetLoader.ahSound.play(BaseGame.soundVolume, MathUtils.random(0.8f, 1.2f), 0f);
                 return;
             }
         }

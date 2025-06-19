@@ -26,13 +26,16 @@ public class AssetLoader implements AssetErrorListener {
     public static String backgroundShader;
 
     public static Sound player_shoot_0_sound;
-    public static Array<Sound> cat_meows;
+    public static Array<Sound> cat_meow_sounds;
+    public static Sound ahSound;
+    public static Sound splashSound;
 
     public static Array<Music> music;
     public static Music levelMusic;
     public static Music ambientMusic;
     public static Music drinkingMusic;
     public static Music radiationMusic;
+    public static Music catPurrMusic;
 
     static {
         long time = System.currentTimeMillis();
@@ -40,7 +43,7 @@ public class AssetLoader implements AssetErrorListener {
         BaseGame.assetManager. setLoader(Skin. class, new FWSkinLoader(BaseGame.assetManager. getFileHandleResolver()));
         BaseGame.assetManager.setErrorListener(new AssetLoader());
 
-        cat_meows = new Array<Sound>();
+        cat_meow_sounds = new Array<Sound>();
 
         loadAssets();
         BaseGame.assetManager.finishLoading();
@@ -76,6 +79,9 @@ public class AssetLoader implements AssetErrorListener {
         //BaseGame.assetManager.load("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
         for (int i = 0; i <= 6; i++)
             BaseGame.assetManager.load("audio/sounds/cat/meow_" + i + ".mp3", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/411199__kcjones321__sipping-and-ahh.wav", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/532886__bricklover__water-splash-3.ogg", Sound.class);
+        BaseGame.assetManager.load("audio/sounds/386736__ken788__cat_purring.ogg", Music.class);
 
         // i18n
 
@@ -111,7 +117,10 @@ public class AssetLoader implements AssetErrorListener {
         // sounds
         //player_shoot_0_sound = BaseGame.assetManager.get("audio/sounds/player/Laser_Shoot48.wav", Sound.class);
         for (int i = 0; i <= 6; i++)
-            cat_meows.add(BaseGame.assetManager.get("audio/sounds/cat/meow_" + i + ".mp3", Sound.class));
+            cat_meow_sounds.add(BaseGame.assetManager.get("audio/sounds/cat/meow_" + i + ".mp3", Sound.class));
+        ahSound = BaseGame.assetManager.get("audio/sounds/411199__kcjones321__sipping-and-ahh.wav", Sound.class);
+        splashSound = BaseGame.assetManager.get("audio/sounds/532886__bricklover__water-splash-3.ogg", Sound.class);
+        catPurrMusic = BaseGame.assetManager.get("audio/sounds/386736__ken788__cat_purring.ogg", Music.class);
 
         // i18n
 
