@@ -16,7 +16,6 @@ import no.sandramoen.libgdx33.utils.BaseGame;
 public class WaterZone {
 
     private Polygon bounds;
-    private float radius;
     private int numSides;
     private float centerX, centerY;
 

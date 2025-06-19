@@ -56,9 +56,9 @@ public class Enemy extends BaseActor {
         //System.out.println("movement speed: " + movementSpeed + ", duration: " + duration);
         addAction(Actions.forever(Actions.sequence(
             Actions.delay(duration),
-            Actions.run( () -> {flip();}),
+            Actions.run(this::flip),
             Actions.delay(duration),
-            Actions.run( () -> {flip();})
+            Actions.run(this::flip)
         )));
 
         purrSound.isLooping();
