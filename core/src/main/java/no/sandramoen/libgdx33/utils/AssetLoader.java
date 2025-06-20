@@ -29,6 +29,7 @@ public class AssetLoader implements AssetErrorListener {
     public static Array<Sound> cat_meow_sounds;
     public static Sound ahSound;
     public static Sound splashSound;
+    public static Sound heartBeatSound;
 
     public static Array<Music> music;
     public static Music levelMusic;
@@ -82,6 +83,7 @@ public class AssetLoader implements AssetErrorListener {
         BaseGame.assetManager.load("audio/sounds/411199__kcjones321__sipping-and-ahh.wav", Sound.class);
         BaseGame.assetManager.load("audio/sounds/532886__bricklover__water-splash-3.ogg", Sound.class);
         BaseGame.assetManager.load("audio/sounds/386736__ken788__cat_purring.ogg", Music.class);
+        BaseGame.assetManager.load("audio/sounds/332812__loudernoises__heartbeat-140bpm.mp3", Sound.class);
 
         // i18n
 
@@ -121,6 +123,7 @@ public class AssetLoader implements AssetErrorListener {
         ahSound = BaseGame.assetManager.get("audio/sounds/411199__kcjones321__sipping-and-ahh.wav", Sound.class);
         splashSound = BaseGame.assetManager.get("audio/sounds/532886__bricklover__water-splash-3.ogg", Sound.class);
         catPurrMusic = BaseGame.assetManager.get("audio/sounds/386736__ken788__cat_purring.ogg", Music.class);
+        heartBeatSound = BaseGame.assetManager.get("audio/sounds/332812__loudernoises__heartbeat-140bpm.mp3", Sound.class);
 
         // i18n
 

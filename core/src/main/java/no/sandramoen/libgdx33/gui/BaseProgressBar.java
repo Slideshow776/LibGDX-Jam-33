@@ -3,6 +3,7 @@ package no.sandramoen.libgdx33.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -12,6 +13,7 @@ import com.github.tommyettinger.textra.TypingLabel;
 
 import no.sandramoen.libgdx33.utils.AssetLoader;
 import no.sandramoen.libgdx33.utils.BaseActor;
+import no.sandramoen.libgdx33.utils.BaseGame;
 
 
 public class BaseProgressBar extends BaseActor {
@@ -21,6 +23,10 @@ public class BaseProgressBar extends BaseActor {
 
     public BaseActor progress;
     private TypingLabel label;
+    private Color original_color;
+    private Color original_progress_color;
+    private boolean is_warning = false;
+    private float animation_strength = 0.1f;
 
     public BaseProgressBar(float x, float y, Stage stage) {
         super(0f, 0f, stage);
@@ -61,10 +67,39 @@ public class BaseProgressBar extends BaseActor {
     }
 
 
+    public void set_color (Color color) {
+        original_color = color;
+        setColor(color);
+    }
+
+
     public void setProgress(int percentage) {
         level = Math.min(level + percentage, 100);
         float newWidth = (float) level / 100 * getWidth();
         progress.setSize(newWidth, getHeight());
+    }
+
+
+    public void activate_warning() {
+        if (is_warning)
+            return;
+
+        AssetLoader.heartBeatSound.play(BaseGame.soundVolume, MathUtils.random(0.9f, 1.1f), 0f);
+        is_warning = true;
+        animation_strength = 0.25f;
+        setColor(Color.RED);
+        setProgressBarColor(original_progress_color);
+    }
+
+
+    public void deactivate_warning() {
+        if (!is_warning)
+            return;
+
+        is_warning = false;
+        animation_strength = 0.1f;
+        setColor(original_color);
+        setProgressBarColor(original_progress_color);
     }
 
 
@@ -88,8 +123,8 @@ public class BaseProgressBar extends BaseActor {
 
         Action action = Actions.sequence(
             Actions.delay(duration * 0.16f),
-            Actions.scaleTo(1.0f, 1.1f, duration * 0.16f, Interpolation.elasticOut),
-            Actions.scaleTo(1.0f, 0.9f, duration * 0.16f, Interpolation.elasticOut),
+            Actions.scaleTo(1.0f, 1.0f + animation_strength, duration * 0.16f, Interpolation.elasticOut),
+            Actions.scaleTo(1.0f, 1.0f - animation_strength, duration * 0.16f, Interpolation.elasticOut),
             Actions.scaleTo(1.0f, 1.0f, duration, Interpolation.elasticOut)
         );
         addAction(action);
@@ -107,8 +142,8 @@ public class BaseProgressBar extends BaseActor {
 
         Action action = Actions.sequence(
             Actions.delay(0.2f),
-            Actions.scaleTo(1.0f, 0.98f, duration * 0.12f, Interpolation.bounceOut),
-            Actions.scaleTo(1.0f, 1.02f, duration * 0.12f, Interpolation.bounceOut),
+            Actions.scaleTo(1.0f, 1.0f - animation_strength, duration * 0.12f, Interpolation.bounceOut),
+            Actions.scaleTo(1.0f, 1.0f + animation_strength, duration * 0.12f, Interpolation.bounceOut),
             Actions.scaleTo(1.0f, 1.0f, duration, Interpolation.bounceOut)
         );
         addAction(action);
@@ -124,6 +159,7 @@ public class BaseProgressBar extends BaseActor {
     // Set the color of the progress bar
     public void setProgressBarColor(Color color) {
         if (progress != null) {
+            original_progress_color = color;
             progress.setColor(color);
         }
     }

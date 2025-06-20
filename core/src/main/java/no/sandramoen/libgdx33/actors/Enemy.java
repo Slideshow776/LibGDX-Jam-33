@@ -32,8 +32,6 @@ public class Enemy extends BaseActor {
         super(0f, 0f, s);
 
         loadImage("cat_normal");
-        //setColor(Color.FIREBRICK);
-        //setDebug(true);
 
         // body
         float width = MathUtils.random(0.75f, 1.25f);
@@ -52,7 +50,7 @@ public class Enemy extends BaseActor {
         // spawn
         reset();
 
-        float duration = 2.5f * 1 / movementSpeed;
+        float duration = 2.0f * 1 / movementSpeed;
         //System.out.println("movement speed: " + movementSpeed + ", duration: " + duration);
         addAction(Actions.forever(Actions.sequence(
             Actions.delay(duration),
@@ -101,11 +99,20 @@ public class Enemy extends BaseActor {
         setSize(width, height);
         setBoundaryPolygon(8, 0.5f);
 
-        setMaxSpeed(movementSpeed);
-        setAcceleration(movementAcceleration);
-        setDeceleration(movementAcceleration);
+        addAction(Actions.sequence(
+            Actions.delay(0.75f), // hack that eliminates particle effect misfire
+            Actions.run(() -> {
+                setMaxSpeed(movementSpeed);
+                setAcceleration(movementAcceleration);
+                setDeceleration(movementAcceleration);
+                effect.start();
+            })
+        ));
 
-        effect.start();
+        setMaxSpeed(0f);
+        setAcceleration(0f);
+        setDeceleration(0f);
+
     }
 
 

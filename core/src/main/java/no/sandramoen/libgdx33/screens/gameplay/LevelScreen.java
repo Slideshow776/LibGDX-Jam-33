@@ -127,7 +127,7 @@ public class LevelScreen extends BaseScreen {
         float overlay_colour = 0.0f;
         overlay.setColor(new Color(overlay_colour, overlay_colour, overlay_colour, 1.0f));
 
-        overlay.addAction(Actions.alpha(0.5f, 0f));
+        overlay.addAction(Actions.alpha(0.6f, 0f));
         overlay.addAction(Actions.alpha(0.0f, 0.5f));
     }
 
@@ -205,7 +205,6 @@ public class LevelScreen extends BaseScreen {
                         AssetLoader.splashSound.play(BaseGame.soundVolume * 0.5f, MathUtils.random(0.5f, 0.8f), 0f);
 
                         if (!enemy.is_dead) {
-                            System.out.println("water effect!");
                             EffectWaterSplash effect = new EffectWaterSplash();
                             effect.setScale(0.005f);
                             effect.start();
@@ -220,7 +219,6 @@ public class LevelScreen extends BaseScreen {
                         enemy.is_dead = true;
                         enemies.removeValue(enemy, true);
                         enemy.remove();
-
                     }
                 }
 
@@ -231,7 +229,7 @@ public class LevelScreen extends BaseScreen {
                     water_zone.shrinking = true;
                     is_drinking = true;
                     if (!water_bar.progress.hasActions())
-                        water_bar.incrementPercentage(1, 0.5f);
+                        water_bar.incrementPercentage(4, 0.5f); // TODO
                 } else {
                     water_zone.shrinking = false;
                 }
@@ -241,6 +239,11 @@ public class LevelScreen extends BaseScreen {
             if (!water_bar.progress.hasActions()) {
                 water_bar.decrementPercentage(1, water_consumption_rate);
             }
+            if (water_bar.level <= 10) {
+                water_bar.activate_warning();
+            } else {
+                water_bar.deactivate_warning();
+            }
 
             if (is_drinking && !is_game_over) {
                 AssetLoader.drinkingMusic.setVolume(BaseGame.soundVolume);
@@ -248,13 +251,18 @@ public class LevelScreen extends BaseScreen {
             }
 
             if (is_radiation && !is_game_over) {
-                AssetLoader.radiationMusic.setVolume(BaseGame.soundVolume);
+                AssetLoader.radiationMusic.setVolume(BaseGame.soundVolume * 0.4f);
             } else {
             }
 
             // consume radiation
             if (!radiation_bar.progress.hasActions()) {
                 radiation_bar.decrementPercentage(1, radiation_consumption_rate);
+            }
+            if (radiation_bar.level >= 90) {
+                radiation_bar.activate_warning();
+            } else {
+                radiation_bar.deactivate_warning();
             }
 
             lastWaterZoneSpawnTime += delta;
@@ -521,7 +529,8 @@ public class LevelScreen extends BaseScreen {
         messageLabel.getColor().a = 1.0f;
         create_skull(player.getX(), player.getY());
 
-        overlay.addAction(Actions.alpha(0.5f, 0.5f));
+        overlay.addAction(Actions.alpha(0.6f, 0.5f));
+        overlay.setZIndex(9001);
     }
 
 
@@ -535,10 +544,9 @@ public class LevelScreen extends BaseScreen {
 
     private void initialize_gui() {
         Image calendar = new Image(new Texture("images/included/gui/calendar.png"));
-
-        float desiredWidth = 50f; // or whatever fits your layout
+        float desiredWidth = 60f; // or whatever fits your layout
         float aspectRatio = calendar.getHeight() / calendar.getWidth();
-        calendar.setSize(desiredWidth, desiredWidth * aspectRatio);
+        calendar.setSize(70f, 60f);
 
         scoreLabel = new TextraLabel("0", AssetLoader.getLabelStyle("Play-Bold59white"));
         scoreLabel.setAlignment(Align.center);
@@ -550,7 +558,7 @@ public class LevelScreen extends BaseScreen {
         water_bar = new BaseProgressBar(Gdx.graphics.getWidth() * -.41f, Gdx.graphics.getHeight() * 0.5f, uiStage);
         water_bar.rotateBy(90f);
         water_bar.setProgress(75);
-        water_bar.setColor(Color.BLUE);
+        water_bar.set_color(Color.BLUE);
         water_bar.setProgressBarColor(Color.CYAN);
         water_bar.setOpacity(0.5f);
         water_bar.progress.setOpacity(0.5f);
@@ -559,7 +567,7 @@ public class LevelScreen extends BaseScreen {
         radiation_bar = new BaseProgressBar(Gdx.graphics.getWidth() * .51f, Gdx.graphics.getHeight() * 0.5f, uiStage);
         radiation_bar.rotateBy(90f);
         radiation_bar.setProgress(50);
-        radiation_bar.setColor(Color.OLIVE);
+        radiation_bar.set_color(Color.OLIVE);
         radiation_bar.setProgressBarColor(Color.GREEN);
         radiation_bar.setOpacity(0.5f);
         radiation_bar.progress.setOpacity(0.5f);

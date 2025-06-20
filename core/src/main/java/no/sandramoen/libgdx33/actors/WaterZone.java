@@ -72,7 +72,7 @@ public class WaterZone {
                 radiusX = 0;
                 radiusY = 0;
                 isActive = false;  // deactivate the zone
-                AssetLoader.ahSound.play(BaseGame.soundVolume, MathUtils.random(0.8f, 1.2f), 0f);
+                AssetLoader.ahSound.play(BaseGame.soundVolume, MathUtils.random(0.9f, 1.3f), 0f);
                 return;
             }
         }
