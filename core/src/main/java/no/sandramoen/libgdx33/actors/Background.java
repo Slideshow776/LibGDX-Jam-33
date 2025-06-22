@@ -12,8 +12,11 @@ public class Background extends BaseActor {
         super(x, y, stage);
 
         loadImage("gui/map");
-        setSize(BaseGame.WORLD_WIDTH + 2, BaseGame.WORLD_HEIGHT + 2);
-        setPosition(-1, -1);
+        setSize(BaseGame.WORLD_WIDTH, BaseGame.WORLD_HEIGHT);
+        setPosition(0, 0);
+
+        /*setSize(BaseGame.WORLD_WIDTH + 2, BaseGame.WORLD_HEIGHT + 2);
+        setPosition(-1, -1);*/
 
         float colour = 0.8f;
         setColor(new Color(colour, colour, colour, 1.0f));

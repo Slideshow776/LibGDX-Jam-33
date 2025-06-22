@@ -229,7 +229,7 @@ public class LevelScreen extends BaseScreen {
                     water_zone.shrinking = true;
                     is_drinking = true;
                     if (!water_bar.progress.hasActions())
-                        water_bar.incrementPercentage(4, 0.5f); // TODO
+                        water_bar.incrementPercentage(1, 0.5f); // TODO
                 } else {
                     water_zone.shrinking = false;
                 }
@@ -455,7 +455,7 @@ public class LevelScreen extends BaseScreen {
 
 
     private void increment_difficulty(float _delta) {
-        float spawnInterval = Math.max(enemySpawnInterval - game_time * 0.125f, MIN_SPAWN_INTERVAL);
+        float spawnInterval = Math.max(enemySpawnInterval - game_time * 0.11f, MIN_SPAWN_INTERVAL);
         if (game_time - lastEnemySpawnTime >= spawnInterval) {
             //System.out.println("added a new enemy, count: " + enemies.size + ", spawn interval: " + spawnInterval);
             lastEnemySpawnTime = game_time;
